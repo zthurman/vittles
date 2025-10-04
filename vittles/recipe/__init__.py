@@ -18,10 +18,12 @@ limitations under the License.
 
 import json
 
+REQUIRED_KEYS = ["Title", "Ingredients", "Directions"]
+
 
 class Recipe:
     def __init__(self, input_recipe: str):
-        with open(input_recipe, 'r') as file:
+        with open(input_recipe, "r") as file:
             self.input_recipe = json.load(file)
         self.recipe_valid = self.verify_input()
         assert self.recipe_valid, f"{self.recipe_keys_message()}"
@@ -31,7 +33,7 @@ class Recipe:
         return msg
 
     def required_keys(self):
-        return ["Title", "Ingredients", "Directions"]
+        return REQUIRED_KEYS
 
     def verify_input(self):
         if all(key in self.input_recipe for key in self.required_keys()):

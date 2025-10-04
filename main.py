@@ -34,5 +34,5 @@ test_recipe = {
 
 # testExample = RecipeAdder(test_recipe).writeToExamples()
 
-test_recipe="json/barbacoa-brisket.json"
+test_recipe = "json/barbacoa-brisket.json"
 test = print(Recipe(test_recipe).required_keys())
