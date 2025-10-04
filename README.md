@@ -6,4 +6,10 @@ recipe book formatted with TeX from recipes in json files.
 ## tests
 
 `make test`
+
+## formatter
+
+This code is formatted with `black`:
+
+`make format`
  
