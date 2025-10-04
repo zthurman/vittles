@@ -16,10 +16,13 @@ limitations under the License.
 
 """
 
+import json
+
 
 class Recipe:
-    def __init__(self, input_recipe: dict):
-        self.input_recipe = input_recipe
+    def __init__(self, input_recipe: str):
+        with open(input_recipe, 'r') as file:
+            self.input_recipe = json.load(file)
         self.recipe_valid = self.verify_input()
         assert self.recipe_valid, f"{self.recipe_keys_message()}"
 

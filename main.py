@@ -1,5 +1,4 @@
 import json
-from fractions import Fraction
 
 from vittles.ingredient import Ingredient
 from vittles.recipe import Recipe
@@ -33,6 +32,7 @@ test_recipe = {
 }
 
 
-testExample = RecipeAdder(test_recipe).writeToExamples()
+# testExample = RecipeAdder(test_recipe).writeToExamples()
 
-test = Recipe(test_recipe)
+test_recipe="json/barbacoa-brisket.json"
+test = print(Recipe(test_recipe).required_keys())

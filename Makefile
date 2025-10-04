@@ -3,16 +3,18 @@ PY = python
 TEST = unittest
 VENV = venv
 DEVENV_DIR = devenv
+DEVENV_BIN = $(DEVENV_DIR)/bin
 
 phony: test devenv format
 
 test:
-	$(PY) -m $(TEST) discover
+	. $(DEVENV_BIN)/activate
+	$(DEVENV_BIN)/$(PY) -m $(TEST) discover
 
 devenv:
 	$(PY) -m venv $(DEVENV_DIR)
-	. $(DEVENV_DIR)/bin/activate
-	$(DEVENV_DIR)/bin/pip install -r dev-requirements.txt
+	. $(DEVENV_BIN)/activate
+	$(DEVENV_BIN)/pip install -r dev-requirements.txt
 
 format:
 	. $(DEVENV_DIR)/bin/activate
