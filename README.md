@@ -5,11 +5,15 @@ recipe book formatted with TeX from recipes in json files.
 
 ## tests
 
-`make test`
+The tests for the project can be run with a make target like this:
+
+- `make test`
 
 ## formatter
 
-This code is formatted with `black`:
+This code is formatted with `black`. To use it:
 
-`make format`
+- `make devenv`
+
+- `make format`
  
