@@ -13,7 +13,7 @@ The tests for the project can be run with a make target like this:
 
 This code is formatted with `black`. To use it:
 
-- `make devenv`
+- `make devenv` (creates a local venv for you called `devenv`)
 
 - `make format`
  
