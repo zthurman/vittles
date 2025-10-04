@@ -17,7 +17,8 @@ limitations under the License.
 """
 
 import unittest
-import re
+import json
+import os
 from hypothesis import given, settings, strategies as st
 from fractions import Fraction
 
@@ -25,10 +26,27 @@ from vittles.recipe import REQUIRED_KEYS, Recipe
 
 
 class TestRecipe(unittest.TestCase):
+    def setUp(self):
+        self.test_json_file = "test.json"
+
     @given(
-        st.dictionaries(keys=st.sampled_from(REQUIRED_KEYS), values=st.text()),
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
     )
-    def testRecipeConstructor(
-        self, dict
-    ):
-        pass
+    def testRecipeConstructor(self, dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(dict, test_file, indent=4)
+        test = Recipe(self.test_json_file)
+        self.assertEqual(test.recipe_valid, True)
+        os.remove(self.test_json_file)

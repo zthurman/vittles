@@ -17,7 +17,6 @@ limitations under the License.
 """
 
 import unittest
-import re
 from hypothesis import given, settings, strategies as st
 from fractions import Fraction
 
