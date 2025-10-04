@@ -32,7 +32,7 @@ class Ingredient:
             self._ingredient[0], 0x41, 0x5A
         ) or is_within_code_points(
             self._ingredient[0], 0x61, 0x7A
-        ), f"What kind of unit is this: {self_ingredient[0]}?"
+        ), f"What kind of unit is this: {self._ingredient[0]}?"
         self.unit = self._ingredient[0]
         # And everything after that is the name
         self.name = " ".join(self._ingredient[1:])
