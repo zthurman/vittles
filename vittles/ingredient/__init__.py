@@ -1,4 +1,4 @@
-'''
+"""
 
 Copyright [2025] [Zechariah Thurman]
 
@@ -14,7 +14,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-'''
+"""
+
 
 class Ingredient:
     def __init__(self, ingredient_str: str):
@@ -38,9 +39,9 @@ class Ingredient:
                 # string is a number we hope it's
                 # part of the ingredient quantity
                 # But if it ends in a % its probably
-	        # a pesky ground beef grade hiding
-	        # at the back of the number so bail
-	        # early if that happens
+                # a pesky ground beef grade hiding
+                # at the back of the number so bail
+                # early if that happens
                 if each[-1] == "%":
                     continue
                 int(each[0])

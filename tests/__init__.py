@@ -10,7 +10,7 @@ class TestIngredient(unittest.TestCase):
         self.assertEqual(test.quantity, "3/4")
         self.assertEqual(test.unit, "tsp")
         self.assertEqual(test.name, "brown gravy")
-    
+
     def testIngredientPintoBeans(self):
         ingredient = "1 1/3 cup pinto beans"
         test = Ingredient(ingredient)

@@ -3,12 +3,13 @@ from fractions import Fraction
 
 from vittles.ingredient import Ingredient
 from vittles.recipe import Recipe
+from vittles.utils import RecipeAdder
 
 test_recipe = {
     "Title": "Barbacoa Brisket",
-    "Prep Time": "",
-    "Cook Time": "",
-    "Servings": 8,
+    "Prep Time": "15 mins",
+    "Cook Time": "8 hours",
+    "Servings": 4,
     "Ingredients": [
         "1 tsp oregano",
         "1 Tbs dark brown sugar",
@@ -24,15 +25,14 @@ test_recipe = {
         "1 jalapeno pepper",
     ],
     "Directions": [
-        "",
+        "Combine first 7 ingredients in a medium bowl, stirring well to combine. Rub mixture into tritip.",
+        "Arrange tomatoes, onion, bell pepper, and jalapeno in bottom of slow cooker. Place tritip on top of vegetables, and drizzle any \
+        remaining spice mixture over tritip and vegetables. Cover and cook on low for 8 hours.",
+        "Remove tritip from slow cooker, and shred meat with two forks. Return tritip to slow cooker, and toss with vegetables.",
     ],
 }
 
-# Specify the filename for your JSON output
-# filename = "examples/crockpot-picadillo.json"
 
-# Open the file in write mode ('w') and use json.dump()
-# with open(filename, 'w') as json_file:
-#    json.dump(test_recipe, json_file, indent=4)
+testExample = RecipeAdder(test_recipe).writeToExamples()
 
 test = Recipe(test_recipe)

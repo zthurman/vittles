@@ -16,6 +16,20 @@ limitations under the License.
 
 """
 
-from vittles.ingredient import Ingredient
-from vittles.recipe import Recipe
-from vittles.utils import RecipeAdder
+from pathlib import Path
+import json
+
+
+class RecipeAdder:
+    def __init__(self, recipe_dict: dict):
+        self.input_recipe = recipe_dict
+
+    def filename(self):
+        this_path = Path(__file__)
+        target_path = this_path.parent.parent.parent
+        filename = f"{target_path}/examples/{self.input_recipe["Title"].lower().replace(" ", "-")}.json"
+        return filename
+
+    def writeToExamples(self):
+        with open(self.filename(), "w") as json_file:
+            json.dump(self.input_recipe, json_file, indent=4)
