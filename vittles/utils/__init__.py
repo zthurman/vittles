@@ -27,7 +27,7 @@ class RecipeAdder:
     def filename(self):
         this_path = Path(__file__)
         target_path = this_path.parent.parent.parent
-        filename = f"{target_path}/examples/{self.input_recipe["Title"].lower().replace(" ", "-")}.json"
+        filename = f"{target_path}/json/{self.input_recipe["Title"].lower().replace(" ", "-")}.json"
         return filename
 
     def writeToExamples(self):
