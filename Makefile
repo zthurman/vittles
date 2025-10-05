@@ -2,21 +2,34 @@
 PY = python
 TEST = unittest
 VENV = venv
+VENV_BIN = $(VENV)/bin
+REQS = requirements.txt
 DEVENV_DIR = devenv
 DEVENV_BIN = $(DEVENV_DIR)/bin
+DEVENV_REQS = dev-requirements.txt
+LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log
 
-phony: test devenv format
+phony: env test devenv format clean
+
+env:
+	$(PY) -m $(VENV) $(VENV)
+	. $(VENV_BIN)/activate
+	$(VENV_BIN)/pip install -r $(REQS)
 
 test:
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/$(PY) -m $(TEST) discover
 
 devenv:
-	$(PY) -m venv $(DEVENV_DIR)
+	$(PY) -m $(VENV) $(DEVENV_DIR)
 	. $(DEVENV_BIN)/activate
-	$(DEVENV_BIN)/pip install -r dev-requirements.txt
+	$(DEVENV_BIN)/pip install -r $(DEVENV_REQS)
 
 format:
-	. $(DEVENV_DIR)/bin/activate
-	$(DEVENV_DIR)/bin/black .
-	
+	. $(DEVENV_BIN)/activate
+	$(DEVENV_BIN)/black .
+
+clean:
+ifneq ($(LATEX_ARTIFACTS),)
+	rm -f $(LATEX_ARTIFACTS)
+endif

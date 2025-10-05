@@ -1,8 +1,8 @@
-import json
-
 from vittles.ingredient import Ingredient
-from vittles.recipe import Recipe
+
+# from vittles.recipe import Recipe
 from vittles.utils import RecipeAdder
+
 
 test_recipe = {
     "Title": "Barbacoa Brisket",
@@ -25,14 +25,49 @@ test_recipe = {
     ],
     "Directions": [
         "Combine first 7 ingredients in a medium bowl, stirring well to combine. Rub mixture into tritip.",
-        "Arrange tomatoes, onion, bell pepper, and jalapeno in bottom of slow cooker. Place tritip on top of vegetables, and drizzle any \
-        remaining spice mixture over tritip and vegetables. Cover and cook on low for 8 hours.",
+        "Arrange tomatoes, onion, bell pepper, and jalapeno in bottom of slow cooker. Place tritip on top of vegetables, and drizzle any remaining spice mixture over tritip and vegetables. Cover and cook on low for 8 hours.",
         "Remove tritip from slow cooker, and shred meat with two forks. Return tritip to slow cooker, and toss with vegetables.",
     ],
 }
 
-
 # testExample = RecipeAdder(test_recipe).writeToExamples()
 
-test_recipe = "json/barbacoa-brisket.json"
-test = print(Recipe(test_recipe).required_keys())
+from pylatex import Command, Document, Section, Subsection, Package
+from pylatex.base_classes import Environment
+from pylatex.utils import NoEscape, italic
+
+
+class Recipe(Environment):
+    """A class that represents an xcookybooky recipe."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class RecipeBook(Document):
+    def __init__(self):
+        super().__init__()
+
+        self.preamble.append(Package("xcookybooky"))
+        self.preamble.append(Command("title", "Awesome Title"))
+        self.preamble.append(Command("author", "Anonymous"))
+        self.preamble.append(Command("date", NoEscape(r"\today")))
+        self.append(NoEscape(r"\maketitle"))
+
+    def fill_document(self):
+        with self.create(Recipe()):
+            self.append(NoEscape("{Test Recipe}"))
+
+        with self.create(Section("A section")):
+            self.append("Some regular text and some")
+            self.append(italic("italic text"))
+
+            with self.create(Subsection("A subsection")):
+                self.append("Also some crazy characters: $&#{}")
+
+
+test = RecipeBook()
+test.fill_document()
+
+test.generate_pdf("basic_testing", clean_tex=False)
+tex = test.dumps()

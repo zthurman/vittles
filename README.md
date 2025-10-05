@@ -1,7 +1,8 @@
 # vittles
 
-This is a collection of utilities that will someday generate a
-recipe book formatted with TeX from recipes in json files.
+This project (when complete) will basically glue [xcookybooky](https://github.com/SvenHarder/xcookybooky) into
+[PyLaTeX](https://github.com/JelteF/PyLaTeX). So we're just piggybacking off of all of their actual hard work to
+make something that might be nifty to like twelve people in the world.
 
 ## tests
 
