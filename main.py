@@ -43,6 +43,8 @@ from pylatex.utils import NoEscape, italic
 class ClearPage(CommandBase):
     """A command that clears the page"""
 
+class TableOfContents(CommandBase):
+    """A command that clears the page"""
 
 class Recipe(Environment):
     """A class that represents an xcookybooky recipe."""
@@ -60,7 +62,7 @@ class TexIngredientsTable(ContainerCommand):
         super().__init__(**kwargs)
 
 
-class RecipeBook(Document):
+class Vittles(Document):
     def __init__(self):
         super().__init__()
 
@@ -70,6 +72,8 @@ class RecipeBook(Document):
         self.preamble.append(Command("date", NoEscape(r"\today")))
         self.append(NoEscape(r"\maketitle"))
         self.append(ClearPage())
+        self.append(TableOfContents())
+        self.append(ClearPage())
 
     def fill_document(self):
         with self.create(Recipe()):
@@ -78,7 +82,7 @@ class RecipeBook(Document):
                 self.append(NoEscape("2 bar & Dark Chocolate"))
 
 
-test = RecipeBook()
+test = Vittles()
 test.fill_document()
 test.generate_pdf("basic_testing", clean_tex=False)
 tex = test.dumps()
