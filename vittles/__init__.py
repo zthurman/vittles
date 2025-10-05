@@ -17,5 +17,5 @@ limitations under the License.
 """
 
 from vittles.ingredient import Ingredient
-from vittles.recipe import Recipe
+from vittles.recipe import JsonRecipeImporter
 from vittles.utils import RecipeAdder

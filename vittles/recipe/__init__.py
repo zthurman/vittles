@@ -21,7 +21,7 @@ import json
 REQUIRED_KEYS = ["Title", "Ingredients", "Directions"]
 
 
-class Recipe:
+class JsonRecipeImporter:
     def __init__(self, input_recipe: str):
         with open(input_recipe, "r") as file:
             self.input_recipe = json.load(file)

@@ -1,6 +1,6 @@
 from vittles.ingredient import Ingredient
 
-# from vittles.recipe import Recipe
+from vittles.recipe import JsonRecipeImporter
 from vittles.utils import RecipeAdder
 
 
@@ -32,6 +32,7 @@ test_recipe = {
 
 # testExample = RecipeAdder(test_recipe).writeToExamples()
 
+import os
 from pylatex import Command, Document, Section, Subsection, Package
 from pylatex.base_classes import Environment
 from pylatex.utils import NoEscape, italic
@@ -68,6 +69,5 @@ class RecipeBook(Document):
 
 test = RecipeBook()
 test.fill_document()
-
 test.generate_pdf("basic_testing", clean_tex=False)
 tex = test.dumps()

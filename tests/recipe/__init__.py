@@ -22,7 +22,7 @@ import os
 from hypothesis import given, settings, strategies as st
 from fractions import Fraction
 
-from vittles.recipe import REQUIRED_KEYS, Recipe
+from vittles.recipe import REQUIRED_KEYS, JsonRecipeImporter
 
 
 class TestRecipe(unittest.TestCase):
@@ -44,9 +44,9 @@ class TestRecipe(unittest.TestCase):
             )
         ),
     )
-    def testRecipeConstructor(self, dict):
+    def testJsonRecipeImporter(self, dict):
         with open(self.test_json_file, "w") as test_file:
             json.dump(dict, test_file, indent=4)
-        test = Recipe(self.test_json_file)
+        test = JsonRecipeImporter(self.test_json_file)
         self.assertEqual(test.recipe_valid, True)
         os.remove(self.test_json_file)
