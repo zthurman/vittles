@@ -36,12 +36,21 @@ test_recipe = {
 
 import os
 from pylatex import Command, Document, Section, Subsection, Package
-from pylatex.base_classes import Environment
+from pylatex.base_classes import Environment, ContainerCommand
 from pylatex.utils import NoEscape, italic
 
 
 class Recipe(Environment):
     """A class that represents an xcookybooky recipe."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class TexIngredientsTable(ContainerCommand):
+    """A class that represents xcookybooky ingredients."""
+
+    _latex_name = "ingredients"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -60,6 +69,8 @@ class RecipeBook(Document):
     def fill_document(self):
         with self.create(Recipe()):
             self.append(NoEscape("{Test Recipe}"))
+            with self.create(TexIngredientsTable()):
+                self.append(NoEscape("2 bar & Dark Chocolate"))
 
         with self.create(Section("A section")):
             self.append("Some regular text and some")
