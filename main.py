@@ -36,8 +36,12 @@ test_recipe = {
 
 import os
 from pylatex import Command, Document, Section, Subsection, Package
-from pylatex.base_classes import Environment, ContainerCommand
+from pylatex.base_classes import Environment, ContainerCommand, CommandBase
 from pylatex.utils import NoEscape, italic
+
+
+class ClearPage(CommandBase):
+    """A command that clears the page"""
 
 
 class Recipe(Environment):
@@ -61,23 +65,17 @@ class RecipeBook(Document):
         super().__init__()
 
         self.preamble.append(Package("xcookybooky"))
-        self.preamble.append(Command("title", "Awesome Title"))
+        self.preamble.append(Command("title", "Vittles"))
         self.preamble.append(Command("author", "Anonymous"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
         self.append(NoEscape(r"\maketitle"))
+        self.append(ClearPage())
 
     def fill_document(self):
         with self.create(Recipe()):
             self.append(NoEscape("{Test Recipe}"))
             with self.create(TexIngredientsTable()):
                 self.append(NoEscape("2 bar & Dark Chocolate"))
-
-        with self.create(Section("A section")):
-            self.append("Some regular text and some")
-            self.append(italic("italic text"))
-
-            with self.create(Subsection("A subsection")):
-                self.append("Also some crazy characters: $&#{}")
 
 
 test = RecipeBook()
