@@ -1,4 +1,4 @@
-# Define variables
+# Python and venv stuff
 PY = python
 TEST = unittest
 VENV = venv
@@ -7,6 +7,10 @@ REQS = requirements.txt
 DEVENV_DIR = devenv
 DEVENV_BIN = $(DEVENV_DIR)/bin
 DEVENV_REQS = dev-requirements.txt
+
+# Use this in clean target in case we
+# try to compile any TeX files without
+# PyLaTeX
 LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log
 
 phony: env test devenv format clean
