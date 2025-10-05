@@ -32,7 +32,7 @@ test_recipe = {
     ],
 }
 
-#testExample = RecipeAdder(test_recipe).writeToExamples()
+# testExample = RecipeAdder(test_recipe).writeToExamples()
 
 import os
 from pylatex import Command, Document, Section, Subsection, Package

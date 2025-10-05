@@ -1,3 +1,5 @@
+SHELL:=/bin/bash
+
 # Python and venv stuff
 PY = python
 TEST = unittest
@@ -16,6 +18,7 @@ LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log
 phony: env test devenv format clean
 
 env:
+	./ensure-texlive.sh
 	$(PY) -m $(VENV) $(VENV)
 	. $(VENV_BIN)/activate
 	$(VENV_BIN)/pip install -r $(REQS)
