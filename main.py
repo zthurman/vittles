@@ -1,50 +1,44 @@
 from vittles.ingredient import Ingredient
-
 from vittles.recipe import JsonRecipeImporter
 from vittles.utils import RecipeAdder
 
 
 test_recipe = {
-    "Title": "Ropa Vieja",
+    "Title": "Easy Pulled Pork",
     "Prep Time": "15 mins",
-    "Cook Time": "4.5-7.5 hours",
-    "Servings": "4 to 6",
-    "Ingredients": [
-        "3 Tbs vegetable oil",
-        "2 onions, halved and sliced thin",
-        "2 red bell peppers, stemmed, seeded, and cut into 1/2 inch wide strips",
-        "1/4 cup tomato paste",
-        "4 garlic cloves minced",
-        "2 tsp ground cumin",
-        "1 1/2 tsp dried oregano",
-        "1/2 cup dry white wine",
-        "2 Tbs soy sauce",
-        "2 bay leaves",
-        "1 (2-pound) flank steak, trimmed and cut crosswise against grain into four equal pieces",
-        "3/4 cup pitted large brine-cured green olives, sliced",
-        "1 Tbs distilled white vinegar",
+    "Cook Time": "4-7 hours",
+    "Servings": "2 to 4",
+    "Ingredients": [ "1/2 cup chicken broth",
+        "2 slices bacon",
+        "1 Tbs packed brown sugar",
+        "1 Tbs paprika",
+        "1 1/2 tsp chili powder",
+        "1 lbs pork ribs",
+        "3/4 cup barbecue sauce",
     ],
     "Directions": [
-        "Heat oil in 12-inch skillet over medium-high heat until shimmering. Add onions and peppers, cover and cook, stirring occasionally, until softened and spotty brown, 8- 10 minutes",
-        "Push vegetables to side of the skillet. Add tomato paste, garlic, cumin, and oregano to center of skillet and cook, uncovered, until fragrant, about 1 minute. Stir tomato paste mixture into vegetables. Stir in wine and cook until nearly evaporated, about 2 minutes; transfer to slow cooker.",
-        "Stir soy sauce and bay leaves into slow cooker. Season steak with salt and pepper and nestle cooker. Cover and cook until beef is tender and fork slips easily in and out of meat, 6 to 7 hours on low or 4 to 5 hours on high.",
-        "Transfer steak to cutting board, let cool slightly, then shread into bite-size pieces using 2 forks. Discard bay leaves. Stir beef and olives into slow cooker and let sit until heated through, about 5 minutes. Stir in venegar and season with salt and pepper to taste. Serve.",
+        "Combine broth and bacon in slow cooker. Combine sugar, paprika, chili powder in bowl. Pat ribs dry with paper towels and rub with spice mixture. Nestle ribs into slow cooker, cover and cook until pork is tender, 6-7 hours on low or 4-5 hours on high.",
+        "Remove bones from ribs with tongs. Shred meat in slow cooker with two forks.",
+        "Give bacon to the cat. Make a best effort to get the fat off the top of the cooking liquid. Add barbecue sauce to shredded meat and cooking liquid and mix together well.",
     ],
 }
 
-# testExample = RecipeAdder(test_recipe).writeToExamples()
+testExample = RecipeAdder(test_recipe).writeToExamples()
 
 import os
-from pylatex import Command, Document, Section, Subsection, Package
-from pylatex.base_classes import Environment, ContainerCommand, CommandBase
-from pylatex.utils import NoEscape, italic
+import json
+from pylatex import Command, Document, Section, Subsection, Package, Enumerate
+from pylatex.base_classes import Environment, ContainerCommand, CommandBase, LatexObject
+from pylatex.utils import NoEscape
 
 
 class ClearPage(CommandBase):
     """A command that clears the page"""
 
+
 class TableOfContents(CommandBase):
-    """A command that clears the page"""
+    """A command that creates a table of contents"""
+
 
 class Recipe(Environment):
     """A class that represents an xcookybooky recipe."""
@@ -62,13 +56,54 @@ class TexIngredientsTable(ContainerCommand):
         super().__init__(**kwargs)
 
 
+class Preparation(ContainerCommand):
+    """A class that represents xcookybooky preparation instructions."""
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+class DataOnlyCommandBase(LatexObject):
+    def __init__(self, data):
+        self.data = data
+        super().__init()
+
+    def dumps(self):
+        """Represent the command as a string in LaTeX syntax.
+
+        Returns
+        -------
+        str
+            The LaTeX formatted command
+        """
+
+        return r"\{command} {data}".format(
+            command=self.latex_name,
+            data=self.data,
+        )
+
+
+class Step(DataOnlyCommandBase):
+    """
+    A class that represents xcookybooky step inside preparation instructions.
+    This one is weird because it takes no options, arguments or extra arguments
+    like the class of stuff CommandBase is built for. So we make a DataOnlyCommandBase
+    above and hope for the best.
+    """
+    def __init__(self, data):
+        super().__init__(data)
+
+
 class Vittles(Document):
-    def __init__(self):
+    def __init__(self, recipe_path: str = "json"):
         super().__init__()
 
+        self.recipe_path = recipe_path
+        self.available_recipes = os.listdir(self.recipe_path)
+
+        self.preamble.append(Package("lettrine"))
         self.preamble.append(Package("xcookybooky"))
         self.preamble.append(Command("title", "Vittles"))
-        self.preamble.append(Command("author", "Anonymous"))
+        self.preamble.append(Command("author", "Zechariah Thurman"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
         self.append(NoEscape(r"\maketitle"))
         self.append(ClearPage())
@@ -76,10 +111,20 @@ class Vittles(Document):
         self.append(ClearPage())
 
     def fill_document(self):
-        with self.create(Recipe()):
-            self.append(NoEscape("{Test Recipe}"))
-            with self.create(TexIngredientsTable()):
-                self.append(NoEscape("2 bar & Dark Chocolate"))
+        with self.create(Section("Slow Cooker Meals")):
+            for recipe in self.available_recipes:
+                with open(f"{self.recipe_path}/{recipe}", "r") as file:
+                    input_recipe = json.load(file)
+                    with self.create(Recipe()):
+                        raw_title = rf'{{{input_recipe["Title"]}}}'
+                        self.append(NoEscape(raw_title))
+                        with self.create(Preparation()):
+                            with self.create(Enumerate()) as enum:
+                                for step in input_recipe["Directions"]:
+                                    enum.add_item(step)
+                        with self.create(TexIngredientsTable()):
+                            self.append(NoEscape("2 bar & Dark Chocolate"))
+                self.append(ClearPage())
 
 
 test = Vittles()
