@@ -4,27 +4,35 @@ from vittles.utils import RecipeAdder
 
 
 test_recipe = {
-    "Title": "Easy Pulled Pork",
+    "Title": "Dorito Casserole",
     "Prep Time": "15 mins",
-    "Cook Time": "4-7 hours",
-    "Servings": "2 to 4",
+    "Cook Time": "35 mins",
+    "Servings": "8",
     "Ingredients": [
-        "1/2 cup chicken broth",
-        "2 slices bacon",
-        "1 Tbs packed brown sugar",
-        "1 Tbs paprika",
-        "1 1/2 tsp chili powder",
-        "1 lbs pork ribs",
-        "3/4 cup barbecue sauce",
+        "1 lb lean ground beef",
+        "1 yellow onion, chopped",
+        "1 red bell pepper, chopped",
+        "1 1oz packet taco seasoning",
+        "1/2 cup water",
+        "1 14.5oz can diced tomatoes and green chiles",
+        "1 15oz can black beans",
+        "1 cup sour cream",
+        "1 9 1/4oz bag nacho cheese Doritos, crushed",
+        "3 cups shredded cheddar-jack cheese",
+        "1 tomato",
+        "1/2 cup salsa",
     ],
     "Directions": [
-        "Combine broth and bacon in slow cooker. Combine sugar, paprika, chili powder in bowl. Pat ribs dry with paper towels and rub with spice mixture. Nestle ribs into slow cooker, cover and cook until pork is tender, 6-7 hours on low or 4-5 hours on high.",
-        "Remove bones from ribs with tongs. Shred meat in slow cooker with two forks.",
-        "Give bacon to the cat. Make a best effort to get the fat off the top of the cooking liquid. Add barbecue sauce to shredded meat and cooking liquid and mix together well.",
+        "Preheat oven to 350F. Lightly coat 3 quart baking dish with non-stick spray.",
+        "Brown the ground beef, drain the grease, return to pan.",
+        "Add onion and pepper and cook until tender, then add taco seasoning and water. Simmer 5 minutes.",
+        "Stir in diced tomatoes, sour cream and black beans.",
+        "Sprinkle bottom of baking dish with 1/3 of crushed chips. Spoon half meat mixture over chips. Top with second third of crushed chips and 1 1/2 cups cheese.",
+        "Repeat with remaining meat, chips and cheese. Bake in oven for 25 minutes. Dice tomato, serve with salsa and more sour cream.",
     ],
 }
 
-# testExample = RecipeAdder(test_recipe).writeToExamples()
+# testExample = RecipeAdder(test_recipe, category="casseroles").writeToExamples()
 
 import os
 import json
@@ -60,6 +68,11 @@ class TexIngredientsTable(ContainerCommand):
 class Preparation(ContainerCommand):
     """A class that represents xcookybooky preparation instructions."""
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class Portion(CommandBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -101,9 +114,15 @@ class Vittles(Document):
         super().__init__()
 
         self.recipe_path = recipe_path
-        self.available_recipes = os.listdir(self.recipe_path)
+        self.available_categories = os.listdir(self.recipe_path)
+        self.available_recipes = dict()
+        for category in self.available_categories:
+            self.available_recipes[category.title()] = os.listdir(
+                f"{self.recipe_path}/{category}"
+            )
 
         self.preamble.append(Package("xcookybooky"))
+        self.preamble.append(Package("cookingsymbols"))
         self.preamble.append(Command("title", "Vittles"))
         self.preamble.append(Command("author", "Zechariah Thurman"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
@@ -113,29 +132,37 @@ class Vittles(Document):
         self.append(ClearPage())
 
     def fill_document(self):
-        with self.create(Section("Slow Cooker Meals")):
-            for recipe_file in self.available_recipes:
-                recipe = JsonRecipeImporter(
-                    input_recipe=f"{self.recipe_path}/{recipe_file}"
-                )
-                with self.create(Recipe()):
-                    raw_title = rf"{{{recipe.title}}}"
-                    self.append(NoEscape(raw_title))
-                    with self.create(Preparation()):
-                        with self.create(Enumerate()) as enum:
-                            for step in recipe.directions:
-                                enum.add_item(step)
-                    with self.create(TexIngredientsTable()):
-                        with self.create(Tabular("c l")) as table:
-                            for ingredient in recipe.ingredients:
-                                table.add_row(
-                                    f"{ingredient.quantity} {ingredient.unit}",
-                                    f"{ingredient.name}",
+        for category, recipes in self.available_recipes.items():
+            with self.create(Section(category)):
+                for recipe_file in recipes:
+                    recipe = JsonRecipeImporter(
+                        input_recipe=f"{self.recipe_path}/{category.lower()}/{recipe_file}"
+                    )
+                    with self.create(Recipe()):
+                        raw_title = rf"{{{recipe.title}}}"
+                        self.append(NoEscape(raw_title))
+                        self.append(
+                            Portion(
+                                arguments=NoEscape(
+                                    rf"\Dish\enspace{{{recipe.servings}}}"
                                 )
-                self.append(ClearPage())
+                            )
+                        )
+                        with self.create(Preparation()):
+                            with self.create(Enumerate()) as enum:
+                                for step in recipe.directions:
+                                    enum.add_item(step)
+                        with self.create(TexIngredientsTable()):
+                            with self.create(Tabular("c l")) as table:
+                                for ingredient in recipe.ingredients:
+                                    table.add_row(
+                                        f"{ingredient.quantity} {ingredient.unit}",
+                                        f"{ingredient.name}",
+                                    )
+                    self.append(ClearPage())
 
 
 test = Vittles()
 test.fill_document()
-test.generate_pdf("basic_testing", clean_tex=False)
+test.generate_pdf("vittles", clean_tex=False)
 tex = test.dumps()

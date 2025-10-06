@@ -5,10 +5,11 @@ PY = python
 TEST = unittest
 VENV = venv
 VENV_BIN = $(VENV)/bin
-REQS = requirements.txt
+REQ_DIR = requirements
+REQS = $(REQ_DIR)/requirements.txt
 DEVENV_DIR = devenv
 DEVENV_BIN = $(DEVENV_DIR)/bin
-DEVENV_REQS = dev-requirements.txt
+DEVENV_REQS = $(REQ_DIR)/dev-requirements.txt
 
 # Use this in clean target in case we
 # try to compile any TeX files without

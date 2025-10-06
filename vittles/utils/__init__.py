@@ -16,18 +16,24 @@ limitations under the License.
 
 """
 
+import os
 from pathlib import Path
 import json
 
 
 class RecipeAdder:
-    def __init__(self, recipe_dict: dict):
+    def __init__(self, recipe_dict: dict, category: str = None):
         self.input_recipe = recipe_dict
+        self.category = category
 
     def filename(self):
         this_path = Path(__file__)
         target_path = this_path.parent.parent.parent
-        filename = f"{target_path}/json/{self.input_recipe["Title"].lower().replace(" ", "-")}.json"
+        recipe_dir = f"{target_path}/json/{self.category}"
+        os.makedirs(recipe_dir, exist_ok=True)
+        filename = (
+            f"{recipe_dir}/{self.input_recipe["Title"].lower().replace(" ", "-")}.json"
+        )
         return filename
 
     def writeToExamples(self):

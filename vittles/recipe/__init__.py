@@ -20,7 +20,14 @@ import json
 
 from vittles.ingredient import Ingredient
 
-REQUIRED_KEYS = ["Title", "Ingredients", "Directions"]
+REQUIRED_KEYS = [
+    "Title",
+    "Prep Time",
+    "Cook Time",
+    "Servings",
+    "Ingredients",
+    "Directions",
+]
 
 
 class JsonRecipeImporter:
@@ -30,6 +37,9 @@ class JsonRecipeImporter:
         self.recipe_valid = self.verify_input()
         assert self.recipe_valid, f"{self.recipe_keys_message()}"
         self.title = self.recipe_dict["Title"]
+        self.preptime = self.recipe_dict["Prep Time"]
+        self.cooktime = self.recipe_dict["Cook Time"]
+        self.servings = self.recipe_dict["Servings"]
         self.ingredients = self.get_ingredients()
         self.directions = self.recipe_dict["Directions"]
 
