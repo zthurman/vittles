@@ -103,7 +103,6 @@ class Vittles(Document):
         self.recipe_path = recipe_path
         self.available_recipes = os.listdir(self.recipe_path)
 
-        #self.preamble.append(Package("lettrine"))
         self.preamble.append(Package("xcookybooky"))
         self.preamble.append(Command("title", "Vittles"))
         self.preamble.append(Command("author", "Zechariah Thurman"))
