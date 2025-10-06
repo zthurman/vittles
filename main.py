@@ -24,11 +24,11 @@ test_recipe = {
     ],
 }
 
-testExample = RecipeAdder(test_recipe).writeToExamples()
+# testExample = RecipeAdder(test_recipe).writeToExamples()
 
 import os
 import json
-from pylatex import Command, Document, Section, Subsection, Package, Enumerate
+from pylatex import Command, Document, Section, Subsection, Package, Enumerate, Tabular
 from pylatex.base_classes import Environment, ContainerCommand, CommandBase, LatexObject
 from pylatex.utils import NoEscape
 
@@ -103,7 +103,7 @@ class Vittles(Document):
         self.recipe_path = recipe_path
         self.available_recipes = os.listdir(self.recipe_path)
 
-        self.preamble.append(Package("lettrine"))
+        #self.preamble.append(Package("lettrine"))
         self.preamble.append(Package("xcookybooky"))
         self.preamble.append(Command("title", "Vittles"))
         self.preamble.append(Command("author", "Zechariah Thurman"))
@@ -115,18 +115,24 @@ class Vittles(Document):
 
     def fill_document(self):
         with self.create(Section("Slow Cooker Meals")):
-            for recipe in self.available_recipes:
-                with open(f"{self.recipe_path}/{recipe}", "r") as file:
-                    input_recipe = json.load(file)
-                    with self.create(Recipe()):
-                        raw_title = rf'{{{input_recipe["Title"]}}}'
-                        self.append(NoEscape(raw_title))
-                        with self.create(Preparation()):
-                            with self.create(Enumerate()) as enum:
-                                for step in input_recipe["Directions"]:
-                                    enum.add_item(step)
-                        with self.create(TexIngredientsTable()):
-                            self.append(NoEscape("2 bar & Dark Chocolate"))
+            for recipe_file in self.available_recipes:
+                recipe = JsonRecipeImporter(
+                    input_recipe=f"{self.recipe_path}/{recipe_file}"
+                )
+                with self.create(Recipe()):
+                    raw_title = rf"{{{recipe.title}}}"
+                    self.append(NoEscape(raw_title))
+                    with self.create(Preparation()):
+                        with self.create(Enumerate()) as enum:
+                            for step in recipe.directions:
+                                enum.add_item(step)
+                    with self.create(TexIngredientsTable()):
+                        with self.create(Tabular("c l")) as table:
+                            for ingredient in recipe.ingredients:
+                                table.add_row(
+                                    f"{ingredient.quantity} {ingredient.unit}",
+                                    f"{ingredient.name}",
+                                )
                 self.append(ClearPage())
 
 

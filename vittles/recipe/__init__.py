@@ -18,15 +18,20 @@ limitations under the License.
 
 import json
 
+from vittles.ingredient import Ingredient
+
 REQUIRED_KEYS = ["Title", "Ingredients", "Directions"]
 
 
 class JsonRecipeImporter:
     def __init__(self, input_recipe: str):
         with open(input_recipe, "r") as file:
-            self.input_recipe = json.load(file)
+            self.recipe_dict = json.load(file)
         self.recipe_valid = self.verify_input()
         assert self.recipe_valid, f"{self.recipe_keys_message()}"
+        self.title = self.recipe_dict["Title"]
+        self.ingredients = self.get_ingredients()
+        self.directions = self.recipe_dict["Directions"]
 
     def recipe_keys_message(self):
         msg = f"A recipe must have: {self.required_keys()}"
@@ -36,7 +41,13 @@ class JsonRecipeImporter:
         return REQUIRED_KEYS
 
     def verify_input(self):
-        if all(key in self.input_recipe for key in self.required_keys()):
+        if all(key in self.recipe_dict for key in self.required_keys()):
             return True
         else:
             return False
+
+    def get_ingredients(self):
+        ingredients = list()
+        for ingredient_str in self.recipe_dict["Ingredients"]:
+            ingredients.append(Ingredient(ingredient_str=ingredient_str))
+        return ingredients
