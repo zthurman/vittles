@@ -8,7 +8,8 @@ test_recipe = {
     "Prep Time": "15 mins",
     "Cook Time": "4-7 hours",
     "Servings": "2 to 4",
-    "Ingredients": [ "1/2 cup chicken broth",
+    "Ingredients": [
+        "1/2 cup chicken broth",
         "2 slices bacon",
         "1 Tbs packed brown sugar",
         "1 Tbs paprika",
@@ -58,9 +59,10 @@ class TexIngredientsTable(ContainerCommand):
 
 class Preparation(ContainerCommand):
     """A class that represents xcookybooky preparation instructions."""
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
 
 class DataOnlyCommandBase(LatexObject):
     def __init__(self, data):
@@ -89,6 +91,7 @@ class Step(DataOnlyCommandBase):
     like the class of stuff CommandBase is built for. So we make a DataOnlyCommandBase
     above and hope for the best.
     """
+
     def __init__(self, data):
         super().__init__(data)
 
