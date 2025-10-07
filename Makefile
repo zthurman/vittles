@@ -16,7 +16,15 @@ DEVENV_REQS = $(REQ_DIR)/dev-requirements.txt
 # PyLaTeX
 LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log
 
-phony: env test devenv format clean
+phony: book addrecipe env test devenv format clean
+
+book:
+	. $(VENV_BIN)/activate
+	$(VENV_BIN)/$(PY) main.py -v
+
+addrecipe:
+	. $(VENV_BIN)/activate
+	$(VENV_BIN)/$(PY) main.py -a
 
 env:
 	./ensure-texlive.sh

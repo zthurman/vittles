@@ -34,8 +34,15 @@ add_recipe = {
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="vittles module main script")
-    parser.add_argument('-a', '--add', action='store_true', help='Add a recipe json file from add_recipe to json directory.')
-    parser.add_argument('-v', '--vittles', action='store_true', help='Generate vittles document.')
+    parser.add_argument(
+        "-a",
+        "--add",
+        action="store_true",
+        help="Add a recipe json file from add_recipe to json directory.",
+    )
+    parser.add_argument(
+        "-v", "--vittles", action="store_true", help="Generate vittles document."
+    )
 
     args = parser.parse_args()
 

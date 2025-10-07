@@ -23,7 +23,15 @@ from pylatex.base_classes import Environment, ContainerCommand, CommandBase, Lat
 from pylatex.utils import NoEscape
 
 from vittles.recipe import JsonRecipeImporter
-from vittles.pylatex.extensions import ClearPage, TableOfContents, Recipe, TexIngredientsTable, Preparation, Portion
+from vittles.pylatex.extensions import (
+    ClearPage,
+    TableOfContents,
+    Recipe,
+    TexIngredientsTable,
+    Preparation,
+    Portion,
+)
+
 
 class Vittles(Document):
     def __init__(self, recipe_path: str = "json"):

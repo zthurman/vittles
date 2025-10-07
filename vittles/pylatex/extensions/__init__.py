@@ -1,8 +1,8 @@
-
 from pylatex.base_classes import Environment, ContainerCommand, CommandBase, LatexObject
 
 
 # General LaTeX Extensions
+
 
 class ClearPage(CommandBase):
     """A command that clears the page"""
@@ -11,7 +11,9 @@ class ClearPage(CommandBase):
 class TableOfContents(CommandBase):
     """A command that creates a table of contents"""
 
+
 # xcookybooky Specific LaTeX Extensions
+
 
 class Recipe(Environment):
     """A class that represents an xcookybooky recipe."""

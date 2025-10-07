@@ -6,11 +6,11 @@ This project extends [PyLaTeX](https://github.com/JelteF/PyLaTeX) with [xcookybo
 
 To add a recipe, modify `add_recipe` dict in `main.py` and when done, run:
 
-    python main.py -a
+    make addrecipe
 
 To generate the latest `vittles` recipe book, run:
 
-    python main.py -v
+    make book
 
 ## tests
 
