@@ -19,3 +19,4 @@ limitations under the License.
 from vittles.ingredient import Ingredient
 from vittles.recipe import JsonRecipeImporter
 from vittles.utils import RecipeAdder
+from vittles.pylatex import Vittles
