@@ -6,22 +6,22 @@ This project extends [PyLaTeX](https://github.com/JelteF/PyLaTeX) with [xcookybo
 
 To add a recipe, modify `add_recipe` dict in `main.py` and when done, run:
 
-    - `python main.py -a`
+    python main.py -a
 
 To generate the latest `vittles` recipe book, run:
 
-    - `python main.py -v`
+    python main.py -v
 
 ## tests
 
 The tests for the project can be run with a make target like this:
 
-    - `make test`
+    make test
 
 ## formatter
 
 This code is formatted with `black`. To use it:
 
-    - `make devenv` (creates a local venv for you called `devenv`)
-    - `make format`
+    make devenv
+    make format
  
