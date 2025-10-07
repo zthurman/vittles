@@ -1,6 +1,9 @@
-from vittles.utils import RecipeAdder
+import argparse
 
-test_recipe = {
+from vittles.utils import RecipeAdder
+from vittles import Vittles
+
+add_recipe = {
     "Title": "Dorito Casserole",
     "Prep Time": "15 mins",
     "Cook Time": "35 mins",
@@ -29,11 +32,20 @@ test_recipe = {
     ],
 }
 
-# testExample = RecipeAdder(test_recipe, category="casseroles").writeToExamples()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="vittles module main script")
+    parser.add_argument('-a', '--add', action='store_true', help='Add a recipe json file from add_recipe to json directory.')
+    parser.add_argument('-v', '--vittles', action='store_true', help='Generate vittles document.')
 
-from vittles import Vittles
+    args = parser.parse_args()
 
-test = Vittles()
-test.fill_document()
-test.generate_pdf("vittles", clean_tex=False)
-tex = test.dumps()
+    if args.add:
+        print("Adding recipe to json...")
+        RecipeAdder(add_recipe, category="casseroles").writeToExamples()
+
+    if args.vittles:
+        print("Generating recipe book from contents of json dir...")
+        recipe_book = Vittles()
+        recipe_book.fill_document()
+        recipe_book.generate_pdf("vittles", clean_tex=False)
+        tex = recipe_book.dumps()
