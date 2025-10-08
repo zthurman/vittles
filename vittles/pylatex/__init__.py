@@ -24,10 +24,12 @@ from pylatex.utils import NoEscape
 
 from vittles.recipe import JsonRecipeImporter
 from vittles.pylatex.extensions import (
+    Title,
+    MakeTitle,
     ClearPage,
     TableOfContents,
     Recipe,
-    TexIngredientsTable,
+    Ingredients,
     Preparation,
     Portion,
 )
@@ -47,10 +49,12 @@ class Vittles(Document):
 
         self.preamble.append(Package("xcookybooky"))
         self.preamble.append(Package("cookingsymbols"))
-        self.preamble.append(Command("title", "Vittles"))
+        # self.preamble.append(Command("title", "Vittles"))
+        self.preamble.append(Title("Vittles"))
         self.preamble.append(Command("author", "Zechariah Thurman"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
-        self.append(NoEscape(r"\maketitle"))
+        # self.append(NoEscape(r"\maketitle"))
+        self.append(MakeTitle())
         self.append(ClearPage())
         self.append(TableOfContents())
         self.append(ClearPage())
@@ -76,7 +80,7 @@ class Vittles(Document):
                             with self.create(Enumerate()) as enum:
                                 for step in recipe.directions:
                                     enum.add_item(step)
-                        with self.create(TexIngredientsTable()):
+                        with self.create(Ingredients()):
                             with self.create(Tabular("c l")) as table:
                                 for ingredient in recipe.ingredients:
                                     table.add_row(

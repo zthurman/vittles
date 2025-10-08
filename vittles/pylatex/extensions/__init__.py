@@ -4,6 +4,14 @@ from pylatex.base_classes import Environment, ContainerCommand, CommandBase, Lat
 # General LaTeX Extensions
 
 
+class Title(CommandBase):
+    """A command that adds the title"""
+
+
+class MakeTitle(CommandBase):
+    """A command that actually generates the title"""
+
+
 class ClearPage(CommandBase):
     """A command that clears the page"""
 
@@ -22,10 +30,8 @@ class Recipe(Environment):
         super().__init__(**kwargs)
 
 
-class TexIngredientsTable(ContainerCommand):
+class Ingredients(ContainerCommand):
     """A class that represents xcookybooky ingredients."""
-
-    _latex_name = "ingredients"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

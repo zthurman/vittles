@@ -2,6 +2,7 @@ SHELL:=/bin/bash
 
 # Python and venv stuff
 PY = python
+COVERAGE = coverage
 TEST = unittest
 VENV = venv
 VENV_BIN = $(VENV)/bin
@@ -16,15 +17,9 @@ DEVENV_REQS = $(REQ_DIR)/dev-requirements.txt
 # PyLaTeX
 LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log
 
-phony: book addrecipe env test devenv format clean
+phony: all env book addrecipe devenv test format clean all
 
-book:
-	. $(VENV_BIN)/activate
-	$(VENV_BIN)/$(PY) main.py -v
-
-addrecipe:
-	. $(VENV_BIN)/activate
-	$(VENV_BIN)/$(PY) main.py -a
+all: env addrecipe book devenv test coverage format
 
 env:
 	./ensure-texlive.sh
@@ -32,14 +27,26 @@ env:
 	. $(VENV_BIN)/activate
 	$(VENV_BIN)/pip install -r $(REQS)
 
-test:
-	. $(DEVENV_BIN)/activate
-	$(DEVENV_BIN)/$(PY) -m $(TEST) discover
+addrecipe:
+	. $(VENV_BIN)/activate
+	$(VENV_BIN)/$(PY) main.py -a
+
+book:
+	. $(VENV_BIN)/activate
+	$(VENV_BIN)/$(PY) main.py -v
 
 devenv:
 	$(PY) -m $(VENV) $(DEVENV_DIR)
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/pip install -r $(DEVENV_REQS)
+
+test:
+	. $(DEVENV_BIN)/activate
+	$(DEVENV_BIN)/$(COVERAGE) run -m $(TEST) discover
+
+coverage:
+	. $(DEVENV_BIN)/activate
+	$(DEVENV_BIN)/$(COVERAGE) report
 
 format:
 	. $(DEVENV_BIN)/activate
