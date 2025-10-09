@@ -4,31 +4,24 @@ from vittles.utils import RecipeAdder
 from vittles import Vittles
 
 add_recipe = {
-    "Title": "Dorito Casserole",
+    "Title": "Slow Cooker Enchilada Quinoa",
     "Prep Time": "15 mins",
-    "Cook Time": "35 mins",
-    "Servings": "8",
+    "Cook Time": "4-7 hours",
+    "Servings": "4",
     "Ingredients": [
-        "1 lb lean ground beef",
-        "1 yellow onion, chopped",
-        "1 red bell pepper, chopped",
-        "1 1oz packet taco seasoning",
-        "1/2 cup water",
-        "1 14.5oz can diced tomatoes and green chiles",
         "1 15oz can black beans",
-        "1 cup sour cream",
-        "1 9 1/4oz bag nacho cheese Doritos, crushed",
-        "3 cups shredded cheddar-jack cheese",
-        "1 tomato",
-        "1/2 cup salsa",
+        "1 15oz can yellow corn",
+        "2 15oz cans red enchilada sauce",
+        "1 15oz can fire roasted tomatoes and green chiles",
+        "1 cup uncooked quinoa",
+        "1/2 cup water",
+        "4 oz cream cheese",
+        "1 12 oz ball of oaxaca cheese, shredded",
     ],
     "Directions": [
-        "Preheat oven to 350F. Lightly coat 3 quart baking dish with non-stick spray.",
-        "Brown the ground beef, drain the grease, return to pan.",
-        "Add onion and pepper and cook until tender, then add taco seasoning and water. Simmer 5 minutes.",
-        "Stir in diced tomatoes, sour cream and black beans.",
-        "Sprinkle bottom of baking dish with 1/3 of crushed chips. Spoon half meat mixture over chips. Top with second third of crushed chips and 1 1/2 cups cheese.",
-        "Repeat with remaining meat, chips and cheese. Bake in oven for 25 minutes. Dice tomato, serve with salsa and more sour cream.",
+        "Add beans, corn, 1 can of enchilada sauce, dice tomatoes and chiles, quinoa, water, and cubed cream cheese to the slow cooker. Stir everything together."
+        "Pour remaining can of enchilada sauce on top, then cover with the shredded cheese. Cover and cook 4-5 hours on high or 5-7 hours on low."
+        "Uncover and top with favorite toppings."
     ],
 }
 
@@ -40,6 +33,7 @@ if __name__ == "__main__":
         action="store_true",
         help="Add a recipe json file from add_recipe to json directory.",
     )
+    parser.add_argument("-c", "--category", default="slow-cooker", help="Category for added recipe")
     parser.add_argument(
         "-v", "--vittles", action="store_true", help="Generate vittles document."
     )
@@ -48,7 +42,7 @@ if __name__ == "__main__":
 
     if args.add:
         print("Adding recipe to json...")
-        RecipeAdder(add_recipe, category="casseroles").writeToExamples()
+        RecipeAdder(add_recipe, category=args.category).writeToExamples()
 
     if args.vittles:
         print("Generating recipe book from contents of json dir...")

@@ -15,7 +15,7 @@ DEVENV_REQS = $(REQ_DIR)/dev-requirements.txt
 # Use this in clean target in case we
 # try to compile any TeX files without
 # PyLaTeX
-LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log
+LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log *.fdb_latexmk *.fls *.toc
 
 phony: all env book addrecipe devenv test format clean all
 

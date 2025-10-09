@@ -32,6 +32,7 @@ from vittles.pylatex.extensions import (
     Ingredients,
     Preparation,
     Portion,
+    Step
 )
 
 
@@ -47,8 +48,9 @@ class Vittles(Document):
                 f"{self.recipe_path}/{category}"
             )
 
-        self.preamble.append(Package("xcookybooky"))
+        self.preamble.append(Package("lettrine")) # for steps to show up
         self.preamble.append(Package("cookingsymbols"))
+        self.preamble.append(Package("xcookybooky"))
         self.preamble.append(Title("Vittles"))
         self.preamble.append(Command("author", "Zechariah Thurman"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
@@ -78,6 +80,11 @@ class Vittles(Document):
                             with self.create(Enumerate()) as enum:
                                 for step in recipe.directions:
                                     enum.add_item(step)
+                            # I don't know why Step horks the compile
+                            # I think I'm doing what xcookybooky tells
+                            # me to do
+                            #for step in recipe.directions:
+                            #    self.append(Step(data=step))
                         with self.create(Ingredients()):
                             with self.create(Tabular("c l")) as table:
                                 for ingredient in recipe.ingredients:
