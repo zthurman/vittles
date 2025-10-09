@@ -62,3 +62,9 @@ class Ingredient:
                 # MUAHAHAHAHAHAHAHA
                 pass
         return quantity_items
+
+    def __eq__(self, other):
+        # To make the 'unittest.TestCase.assertListEqual' work
+        if not isinstance(other, Ingredient):
+            return NotImplemented
+        return self._ingredient == other._ingredient and self.name == other.name

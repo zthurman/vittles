@@ -50,9 +50,9 @@ class Portion(CommandBase):
 
 
 class DataOnlyCommandBase(LatexObject):
-    def __init__(self, data):
+    def __init__(self, *, data=None):
         self.data = data
-        super().__init()
+        super().__init__()
 
     def dumps(self):
         """Represent the command as a string in LaTeX syntax.
@@ -73,9 +73,9 @@ class Step(DataOnlyCommandBase):
     """
     A class that represents xcookybooky step inside preparation instructions.
     This one is weird because it takes no options, arguments or extra arguments
-    like the class of stuff CommandBase is built for. So we make a DataOnlyCommandBase
-    above and hope for the best.
+    like the class of commands that CommandBase is built for. So we make a
+    DataOnlyCommandBase above to cover us.
     """
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, *, data=None):
+        super().__init__(data=data)

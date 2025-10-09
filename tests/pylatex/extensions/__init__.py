@@ -26,6 +26,10 @@ from vittles.pylatex.extensions import (
     ClearPage,
     TableOfContents,
     Recipe,
+    Ingredients,
+    Preparation,
+    Portion,
+    Step,
 )
 
 
@@ -74,3 +78,61 @@ class TestRecipe(unittest.TestCase):
         test = Recipe(data=test_recipe)
         test = test.dumps()
         self.assertEqual(f"\\begin{{recipe}}%\n{test_recipe}%\n\\end{{recipe}}", test)
+
+
+class TestIngredients(unittest.TestCase):
+    @given(
+        st.text(
+            alphabet=st.characters(
+                codec="latin-1", min_codepoint=0x41, max_codepoint=0x5A
+            ),
+            min_size=1,
+        ),
+    )
+    def testIngredients(self, test_ingredients):
+        test = Ingredients(data=test_ingredients)
+        test = test.dumps()
+        self.assertEqual(f"\\ingredients{{%\n{test_ingredients}%\n}}", test)
+
+
+class TestPreparation(unittest.TestCase):
+    @given(
+        st.text(
+            alphabet=st.characters(
+                codec="latin-1", min_codepoint=0x41, max_codepoint=0x5A
+            ),
+            min_size=1,
+        ),
+    )
+    def testPreparation(self, test_preparation):
+        test = Preparation(data=test_preparation)
+        test = test.dumps()
+        self.assertEqual(f"\\preparation{{%\n{test_preparation}%\n}}", test)
+
+
+class TestPortion(unittest.TestCase):
+    @given(
+        st.text(
+            alphabet=st.characters(
+                codec="latin-1", min_codepoint=0x41, max_codepoint=0x5A
+            ),
+            min_size=1,
+        ),
+    )
+    def testPortion(self, portion):
+        test = Portion(arguments=portion).dumps()
+        self.assertEqual(rf"\portion{{{portion}}}", test)
+
+
+class TestStep(unittest.TestCase):
+    @given(
+        st.text(
+            alphabet=st.characters(
+                codec="latin-1", min_codepoint=0x41, max_codepoint=0x5A
+            ),
+            min_size=1,
+        ),
+    )
+    def testStep(self, step):
+        test = Step(data=step).dumps()
+        self.assertEqual(f"\\step {step}", test)
