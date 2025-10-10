@@ -61,6 +61,27 @@ class TestRecipe(unittest.TestCase):
     @given(
         st.fixed_dictionaries(
             mapping=dict.fromkeys(
+                ["Cheese", "Crackers", "Mortadella"],
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testJsonRecipeImporterRecipeInvalid(self, dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(dict, test_file, indent=4)
+        with self.assertRaises(ValueError):
+            test = JsonRecipeImporter(self.test_json_file)
+
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
                 REQUIRED_KEYS,
                 st.text(
                     alphabet=st.characters(

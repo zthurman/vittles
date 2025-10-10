@@ -35,7 +35,6 @@ class JsonRecipeImporter:
         with open(input_recipe, "r") as file:
             self.recipe_dict = json.load(file)
         self.recipe_valid = self.verify_input()
-        assert self.recipe_valid, f"{self.recipe_keys_message()}"
         self.title = self.recipe_dict["Title"]
         self.preptime = self.recipe_dict["Prep Time"]
         self.cooktime = self.recipe_dict["Cook Time"]
@@ -54,7 +53,7 @@ class JsonRecipeImporter:
         if all(key in self.recipe_dict for key in self.required_keys()):
             return True
         else:
-            return False
+            raise ValueError(f"{self.recipe_keys_message()}")
 
     def get_ingredients(self):
         ingredients = list()

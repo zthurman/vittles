@@ -32,7 +32,7 @@ from vittles.pylatex.extensions import (
     Ingredients,
     Preparation,
     Portion,
-    Step
+    Step,
 )
 
 
@@ -48,7 +48,7 @@ class Vittles(Document):
                 f"{self.recipe_path}/{category}"
             )
 
-        self.preamble.append(Package("lettrine")) # for steps to show up
+        self.preamble.append(Package("lettrine"))  # for steps to show up
         self.preamble.append(Package("cookingsymbols"))
         self.preamble.append(Package("xcookybooky"))
         self.preamble.append(Title("Vittles"))
@@ -83,7 +83,7 @@ class Vittles(Document):
                             # I don't know why Step horks the compile
                             # I think I'm doing what xcookybooky tells
                             # me to do
-                            #for step in recipe.directions:
+                            # for step in recipe.directions:
                             #    self.append(Step(data=step))
                         with self.create(Ingredients()):
                             with self.create(Tabular("c l")) as table:

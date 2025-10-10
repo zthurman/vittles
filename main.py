@@ -33,7 +33,9 @@ if __name__ == "__main__":
         action="store_true",
         help="Add a recipe json file from add_recipe to json directory.",
     )
-    parser.add_argument("-c", "--category", default="slow-cooker", help="Category for added recipe")
+    parser.add_argument(
+        "-c", "--category", default="slow-cooker", help="Category for added recipe"
+    )
     parser.add_argument(
         "-v", "--vittles", action="store_true", help="Generate vittles document."
     )
