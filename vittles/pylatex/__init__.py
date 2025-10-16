@@ -52,7 +52,7 @@ class Vittles(Document):
         self.preamble.append(Package("cookingsymbols"))
         self.preamble.append(Package("xcookybooky"))
         self.preamble.append(Title("Vittles"))
-        self.preamble.append(Command("author", "Zechariah Thurman"))
+        self.preamble.append(Command("author", "Zam"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
         self.append(MakeTitle())
         self.append(ClearPage())
