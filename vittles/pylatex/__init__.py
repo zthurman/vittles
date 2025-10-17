@@ -48,16 +48,22 @@ class Vittles(Document):
                 f"{self.recipe_path}/{category}"
             )
 
-        self.preamble.append(Package("lettrine"))  # for steps to show up
-        self.preamble.append(Package("cookingsymbols"))
-        self.preamble.append(Package("xcookybooky"))
-        self.preamble.append(Title("Vittles"))
-        self.preamble.append(Command("author", "Zam"))
-        self.preamble.append(Command("date", NoEscape(r"\today")))
+        self.add_packages_to_preamble()
+        self.add_title_author_date_to_preamble()
         self.append(MakeTitle())
         self.append(ClearPage())
         self.append(TableOfContents())
         self.append(ClearPage())
+
+    def add_packages_to_preamble(self):
+        self.preamble.append(Package("lettrine"))  # for steps to show up
+        self.preamble.append(Package("cookingsymbols"))
+        self.preamble.append(Package("xcookybooky"))
+
+    def add_title_author_date_to_preamble(self):
+        self.preamble.append(Title("Vittles"))
+        self.preamble.append(Command("author", "Zam"))
+        self.preamble.append(Command("date", NoEscape(r"\today")))
 
     def fill_document(self):
         for category, recipes in self.available_recipes.items():
