@@ -29,7 +29,10 @@ class RecipeAdder:
     def filename(self):
         this_path = Path(__file__)
         target_path = this_path.parent.parent.parent
-        recipe_dir = f"{target_path}/json/{self.category}"
+        if self.category is not None:
+            recipe_dir = f"{target_path}/json/{self.category}"
+        else:
+            recipe_dir = f"{target_path}/json"
         os.makedirs(recipe_dir, exist_ok=True)
         filename = (
             f"{recipe_dir}/{self.input_recipe["Title"].lower().replace(" ", "-")}.json"

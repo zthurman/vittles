@@ -48,15 +48,15 @@ class TestRecipe(unittest.TestCase):
             )
         ),
     )
-    def testJsonRecipeImporterRecipeValid(self, dict):
+    def testJsonRecipeImporterRecipeValid(self, test_dict):
         with open(self.test_json_file, "w") as test_file:
-            json.dump(dict, test_file, indent=4)
+            json.dump(test_dict, test_file, indent=4)
         test = JsonRecipeImporter(self.test_json_file)
         self.assertEqual(test.recipe_valid, True)
-        self.assertEqual(test.title, dict["Title"])
-        self.assertEqual(test.preptime, dict["Prep Time"])
-        self.assertEqual(test.cooktime, dict["Cook Time"])
-        self.assertEqual(test.servings, dict["Servings"])
+        self.assertEqual(test.title, test_dict["Title"])
+        self.assertEqual(test.preptime, test_dict["Prep Time"])
+        self.assertEqual(test.cooktime, test_dict["Cook Time"])
+        self.assertEqual(test.servings, test_dict["Servings"])
 
     @given(
         st.fixed_dictionaries(
@@ -73,9 +73,9 @@ class TestRecipe(unittest.TestCase):
             )
         ),
     )
-    def testJsonRecipeImporterRecipeInvalid(self, dict):
+    def testJsonRecipeImporterRecipeInvalid(self, test_dict):
         with open(self.test_json_file, "w") as test_file:
-            json.dump(dict, test_file, indent=4)
+            json.dump(test_dict, test_file, indent=4)
         with self.assertRaises(ValueError):
             test = JsonRecipeImporter(self.test_json_file)
 
@@ -94,11 +94,11 @@ class TestRecipe(unittest.TestCase):
             )
         ),
     )
-    def testJsonRecipeImporterIngredients(self, dict):
+    def testJsonRecipeImporterIngredients(self, test_dict):
         with open(self.test_json_file, "w") as test_file:
-            json.dump(dict, test_file, indent=4)
+            json.dump(test_dict, test_file, indent=4)
         test = JsonRecipeImporter(self.test_json_file)
         validation = list()
-        for each in dict["Ingredients"]:
+        for each in test_dict["Ingredients"]:
             validation.append(Ingredient(ingredient_str=each))
         self.assertListEqual(test.ingredients, validation)
