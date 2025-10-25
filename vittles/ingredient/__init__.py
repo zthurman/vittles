@@ -16,9 +16,8 @@ limitations under the License.
 
 """
 
-
-def is_within_code_points(s, min_code, max_code):
-    return all(min_code <= ord(c) <= max_code for c in s)
+# def is_within_code_points(s, min_code, max_code):
+#    return all(min_code <= ord(c) <= max_code for c in s)
 
 
 class Ingredient:

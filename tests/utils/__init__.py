@@ -20,8 +20,9 @@ import unittest
 from hypothesis import given, settings, strategies as st
 from fractions import Fraction
 
-from vittles.recipe import REQUIRED_KEYS
+import os
 from pathlib import Path
+from vittles.recipe import REQUIRED_KEYS
 
 from vittles.utils import RecipeAdder
 
@@ -42,13 +43,18 @@ class TestRecipeAdder(unittest.TestCase):
             )
         ),
     )
-    def testRecipeAdderConstructorNoneCategory(self, test_dict):
+    def testRecipeAdderNoneCategory(self, test_dict):
         test = RecipeAdder(test_dict)
         self.assertEqual(test.input_recipe, test_dict)
         self.assertEqual(test.category, None)
         test_path = Path(__file__)
         verification_path = f"{test_path.parent.parent.parent}/json/{test_dict["Title"].lower().replace(" ", "-")}.json"
         self.assertEqual(test.filename(), verification_path)
+        test.writeToJson()
+        self.assertTrue(
+            os.path.exists(test.filename()), "The file should have been created"
+        )
+        os.remove(test.filename())
 
     @given(
         st.fixed_dictionaries(
@@ -73,7 +79,15 @@ class TestRecipeAdder(unittest.TestCase):
             min_size=1,
         ),
     )
-    def testRecipeAdderConstructorWithCategory(self, test_dict, test_category):
+    def testRecipeAdderWithCategory(self, test_dict, test_category):
         test = RecipeAdder(test_dict, test_category)
         self.assertEqual(test.input_recipe, test_dict)
         self.assertEqual(test.category, test_category)
+        test_path = Path(__file__)
+        verification_path = f"{test_path.parent.parent.parent}/json/{test.category}/{test_dict["Title"].lower().replace(" ", "-")}.json"
+        self.assertEqual(test.filename(), verification_path)
+        test.writeToJson()
+        self.assertTrue(
+            os.path.exists(test.filename()), "The file should have been created"
+        )
+        os.remove(test.filename())

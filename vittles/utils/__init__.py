@@ -39,6 +39,6 @@ class RecipeAdder:
         )
         return filename
 
-    def writeToExamples(self):
+    def writeToJson(self):
         with open(self.filename(), "w") as json_file:
             json.dump(self.input_recipe, json_file, indent=4)

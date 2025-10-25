@@ -43,8 +43,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.add:
-        print("Adding recipe to json...")
-        RecipeAdder(add_recipe, category=args.category).writeToExamples()
+        print("Adding recipe to json directory...")
+        RecipeAdder(add_recipe, category=args.category).writeToJson()
 
     if args.vittles:
         print("Generating recipe book from contents of json dir...")
