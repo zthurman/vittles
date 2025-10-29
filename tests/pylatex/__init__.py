@@ -20,7 +20,6 @@ import unittest
 import os
 import json
 from hypothesis import given, settings, strategies as st
-from pylatex import Document
 
 from vittles.recipe import REQUIRED_KEYS
 
@@ -52,3 +51,6 @@ class TestVittles(unittest.TestCase):
     def testAddPackages(self, test_dict):
         with open(self.test_json_file, "w") as test_file:
             json.dump(test_dict, test_file, indent=4)
+
+        test = Vittles(self.test_json_file).add_packages_to_preamble().dumps()
+        self.assertEqual(f"\\", test)

@@ -91,3 +91,4 @@ class TestRecipeAdder(unittest.TestCase):
             os.path.exists(test.filename()), "The file should have been created"
         )
         os.remove(test.filename())
+        os.rmdir(f"{test_path.parent.parent.parent}/json/{test.category}")

@@ -48,13 +48,6 @@ class Vittles(Document):
                 f"{self.recipe_path}/{category}"
             )
 
-        self.add_packages_to_preamble()
-        self.add_title_author_date_to_preamble()
-        self.append(MakeTitle())
-        self.append(ClearPage())
-        self.append(TableOfContents())
-        self.append(ClearPage())
-
     def add_packages_to_preamble(self):
         self.preamble.append(Package("lettrine"))  # for steps to show up
         self.preamble.append(Package("cookingsymbols"))
@@ -65,7 +58,16 @@ class Vittles(Document):
         self.preamble.append(Command("author", "Zam"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
 
+    def make_title_and_toc(self):
+        self.append(MakeTitle())
+        self.append(ClearPage())
+        self.append(TableOfContents())
+        self.append(ClearPage())
+
     def fill_document(self):
+        self.add_packages_to_preamble()
+        self.add_title_author_date_to_preamble()
+        self.make_title_and_toc()
         for category, recipes in self.available_recipes.items():
             with self.create(Section(category)):
                 for recipe_file in recipes:
