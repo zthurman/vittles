@@ -11,6 +11,7 @@ REQS = $(REQ_DIR)/requirements.txt
 DEVENV_DIR = devenv
 DEVENV_BIN = $(DEVENV_DIR)/bin
 DEVENV_REQS = $(REQ_DIR)/dev-requirements.txt
+XDG = xdg-open
 
 # Use this in clean target in case we
 # try to compile any TeX files without
@@ -34,6 +35,7 @@ addrecipe:
 book:
 	. $(VENV_BIN)/activate
 	$(VENV_BIN)/$(PY) main.py -v
+	$(XDG) vittles.pdf
 
 devenv:
 	$(PY) -m $(VENV) $(DEVENV_DIR)
