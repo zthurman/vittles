@@ -39,14 +39,30 @@ from vittles.pylatex.extensions import (
 class Vittles(Document):
     def __init__(self, recipe_path: str = "json"):
         super().__init__()
-
         self.recipe_path = recipe_path
-        self.available_categories = os.listdir(self.recipe_path)
+        self.recipe_path_contents = os.listdir(self.recipe_path)
+        self.find_available_categories()
+        self.find_available_recipes()
+
+    def find_available_categories(self):
+        self.available_categories = list()
+        for content in self.recipe_path_contents:
+            if os.path.isdir(os.path.abspath(f"{self.recipe_path}/{content}")):
+                self.available_categories.append(content)
+
+    def find_available_recipes(self):
         self.available_recipes = dict()
-        for category in self.available_categories:
-            self.available_recipes[category.title()] = os.listdir(
-                f"{self.recipe_path}/{category}"
-            )
+        if len(self.available_categories) > 0:
+            for category in self.available_categories:
+                self.available_recipes[category.title()] = os.listdir(
+                    f"{self.recipe_path}/{category}"
+                )
+        else:
+            recipes = list()
+            for potential_recipe in os.listdir(self.recipe_path):
+                if potential_recipe.endswith(".json"):
+                    recipes.append(potential_recipe)
+            self.available_recipes["Recipes"] = recipes
 
     def add_packages_to_preamble(self):
         self.preamble.append(Package("lettrine"))  # for steps to show up

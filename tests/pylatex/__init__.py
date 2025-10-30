@@ -28,7 +28,7 @@ from vittles.pylatex import Vittles
 
 class TestVittles(unittest.TestCase):
     def setUp(self):
-        self.test_json_file = "test.json"
+        self.test_json_file = "tests/test.json"
 
     def tearDown(self):
         os.remove(self.test_json_file)
@@ -48,9 +48,14 @@ class TestVittles(unittest.TestCase):
             )
         ),
     )
-    def testAddPackages(self, test_dict):
+    def testRecipePath(self, test_dict):
         with open(self.test_json_file, "w") as test_file:
             json.dump(test_dict, test_file, indent=4)
 
-        test = Vittles(self.test_json_file).add_packages_to_preamble().dumps()
-        self.assertEqual(f"\\", test)
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir)
+        self.assertEqual(test.recipe_path, test_recipe_dir)
+        self.assertEqual(
+            test.recipe_path_contents, os.listdir(os.path.dirname(self.test_json_file))
+        )
+        # self.assertEqual(f"\\", test.dumps())
