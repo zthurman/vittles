@@ -48,7 +48,11 @@ class Vittles(Document):
         self.available_categories = list()
         for content in self.recipe_path_contents:
             if os.path.isdir(os.path.abspath(f"{self.recipe_path}/{content}")):
-                self.available_categories.append(content)
+                for each in os.listdir(
+                    os.path.abspath(f"{self.recipe_path}/{content}")
+                ):
+                    if each.endswith(".json"):
+                        self.available_categories.append(content)
 
     def find_available_recipes(self):
         self.available_recipes = dict()

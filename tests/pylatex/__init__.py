@@ -58,4 +58,29 @@ class TestVittles(unittest.TestCase):
         self.assertEqual(
             test.recipe_path_contents, os.listdir(os.path.dirname(self.test_json_file))
         )
-        # self.assertEqual(f"\\", test.dumps())
+        self.assertEqual(len(test.available_categories), 0)
+        self.assertEqual(len(test.available_recipes), 1)
+
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testAddPackagesToPreamble(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir)
+        test.add_packages_to_preamble()
+        self.assertEqual(f"\\", test.dumps())
