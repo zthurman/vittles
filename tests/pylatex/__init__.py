@@ -29,6 +29,20 @@ from vittles.pylatex import Vittles
 class TestVittles(unittest.TestCase):
     def setUp(self):
         self.test_json_file = "tests/test.json"
+        self.document_validation_prefix = (
+            f"\\documentclass{{article}}%\n"
+            f"\\usepackage[T1]{{fontenc}}%\n"
+            f"\\usepackage[utf8]{{inputenc}}%\n"
+            f"\\usepackage{{lmodern}}%\n"
+            f"\\usepackage{{textcomp}}%\n"
+            f"\\usepackage{{lastpage}}%\n"
+            f"%\n"
+        )
+        self.document_validation_line_ending = f"%\n"
+        self.document_validation_doc_tag_prefix = (
+            f"\\begin{{document}}%\n" f"\\normalsize%\n"
+        )
+        self.document_validation_doc_tag_suffix = f"\\end{{document}}"
 
     def tearDown(self):
         os.remove(self.test_json_file)
@@ -76,6 +90,36 @@ class TestVittles(unittest.TestCase):
             )
         ),
     )
+    def testBaseDocumentSkeleton(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir)
+        validation = (
+            self.document_validation_prefix
+            + self.document_validation_line_ending
+            + self.document_validation_line_ending
+            + self.document_validation_doc_tag_prefix
+            + self.document_validation_doc_tag_suffix
+        )
+        self.assertEqual(test.dumps(), validation)
+
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
     def testAddPackagesToPreamble(self, test_dict):
         with open(self.test_json_file, "w") as test_file:
             json.dump(test_dict, test_file, indent=4)
@@ -83,4 +127,16 @@ class TestVittles(unittest.TestCase):
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test = Vittles(recipe_path=test_recipe_dir)
         test.add_packages_to_preamble()
-        self.assertEqual(f"\\", test.dumps())
+        packages_validation = (
+            f"\\usepackage{{lettrine}}%\n"
+            f"\\usepackage{{cookingsymbols}}%\n"
+            f"\\usepackage{{xcookybooky}}%\n"
+            f"%\n"
+        )
+        validation = (
+            self.document_validation_prefix
+            + packages_validation
+            + self.document_validation_doc_tag_prefix
+            + self.document_validation_doc_tag_suffix
+        )
+        self.assertEqual(test.dumps(), validation)
