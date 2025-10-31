@@ -140,3 +140,39 @@ class TestVittles(unittest.TestCase):
             + self.document_validation_doc_tag_suffix
         )
         self.assertEqual(test.dumps(), validation)
+    
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testAddTitleAuthorDateToPreamble(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir)
+        test.add_title_author_date_to_preamble()
+        title_author_date_validation = (
+            f"\\title{{Vittles}}%\n"
+            f"\\author{{Zam}}%\n"
+            f"\\date{{\\today}}%\n"
+            f"%\n"
+        )
+        validation = (
+            self.document_validation_prefix
+            + title_author_date_validation
+            + self.document_validation_doc_tag_prefix
+            + self.document_validation_doc_tag_suffix
+        )
+        self.assertEqual(test.dumps(), validation)
