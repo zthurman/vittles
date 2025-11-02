@@ -41,7 +41,7 @@ devenv:
 	$(PY) -m $(VENV) $(DEVENV_DIR)
 ifeq ($(OS),Windows_NT)
 	.\$(DEVENV_DIR)\Scripts\activate
-	pip install -r $(DEVENV_REQS)
+	pip install -r $(REQ_DIR)\dev-requirements.txt
 else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/pip install -r $(DEVENV_REQS)
@@ -67,8 +67,8 @@ endif
 
 format:
 ifeq ($(OS),Windows_NT)
-	call .\$(DEVENV_DIR)\Scripts\activate.bat
-	.\$(DEVENV_DIR)\Scripts\black.exe .
+	.\$(DEVENV_DIR)\Scripts\activate
+	black .
 else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/black .
