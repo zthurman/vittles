@@ -59,11 +59,6 @@ jobs:
         run: make test
       - name: Get coverage
         run: make coverage    
-      - name: Coverage Badge
-        uses: tj-actions/coverage-badge-py@v2
-        id: coverage-badge-py
-        with:
-          output: 'coverage.svg' # Output path for the badge
   
   build-macos:
 
