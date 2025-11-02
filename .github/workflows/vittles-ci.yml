@@ -87,10 +87,6 @@ jobs:
             lettrine
             cookingsymbols
             xcookybooky
-      - name: Debug1
-        run: dir
-      - name: Debug2
-        run: python -m venv devenv
       - name: Debug3
         run: dir
       - name: Create devenv

@@ -1,4 +1,5 @@
 SHELL:=/bin/bash
+UNAME := $(shell uname)
 
 # Python and venv stuff
 PY = python
@@ -13,9 +14,7 @@ DEVENV_BIN = ./$(DEVENV_DIR)/bin
 DEVENV_REQS = $(REQ_DIR)/dev-requirements.txt
 XDG = xdg-open
 
-# Use this in clean target in case we
-# try to compile any TeX files without
-# PyLaTeX
+# Use this in clean target in case we # try to compile any TeX files without # PyLaTeX
 LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log *.fdb_latexmk *.fls *.toc
 
 phony: all env book addrecipe devenv test format clean all
@@ -40,8 +39,8 @@ book:
 devenv:
 	$(PY) -m $(VENV) $(DEVENV_DIR)
 ifeq ($(OS),Windows_NT)
-	.\$(DEVENV_DIR)\Scripts\activate
-	pip.exe install -r $(REQ_DIR)\dev-requirements.txt
+	.\$(DEVENV_DIR)\Scripts\Activate.ps1
+	pip install -r $(REQ_DIR)\dev-requirements.txt
 	dir .\$(DEVENV_DIR)\Scripts
 else
 	. $(DEVENV_BIN)/activate
@@ -50,7 +49,7 @@ endif
 
 test:
 ifeq ($(OS),Windows_NT)
-	.\$(DEVENV_DIR)\Scripts\activate
+	.\$(DEVENV_DIR)\Scripts\Activate.ps1
 	coverage run -m $(TEST) discover
 else
 	. $(DEVENV_BIN)/activate
@@ -59,7 +58,7 @@ endif
 
 coverage:
 ifeq ($(OS),Windows_NT)
-	.\$(DEVENV_DIR)\Scripts\activate
+	.\$(DEVENV_DIR)\Scripts\Activate.ps1
 	coverage report
 else
 	. $(DEVENV_BIN)/activate
@@ -68,7 +67,7 @@ endif
 
 format:
 ifeq ($(OS),Windows_NT)
-	.\$(DEVENV_DIR)\Scripts\activate
+	.\$(DEVENV_DIR)\Scripts\Activate.ps1
 	black .
 else
 	. $(DEVENV_BIN)/activate
