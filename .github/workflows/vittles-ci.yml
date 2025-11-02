@@ -60,7 +60,7 @@ jobs:
       - name: Get coverage
         run: make coverage    
   
-build-windows:
+  build-windows:
 
     runs-on: windows-latest
 
