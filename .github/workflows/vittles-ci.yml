@@ -87,8 +87,13 @@ jobs:
             lettrine
             cookingsymbols
             xcookybooky
-      - name: Debug
+      - name: Debug1
         run: dir
+      - name: Debug2
+        run: python -m venv devenv
+      - name: Debug3
+        run: dir
+      - name: Debug2
       - name: Create devenv
         run: make devenv
         #shell: C:\cygwin64\bin\bash.exe --login '{0}'
