@@ -140,7 +140,7 @@ class TestVittles(unittest.TestCase):
             + self.document_validation_doc_tag_suffix
         )
         self.assertEqual(test.dumps(), validation)
-    
+
     @given(
         st.fixed_dictionaries(
             mapping=dict.fromkeys(
