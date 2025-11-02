@@ -63,7 +63,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: main # The branch to deploy the badge to
-          folder: coverage # The folder containing the badge
+          folder: tests # The folder containing the badge
   
   build-macos:
 
