@@ -88,7 +88,7 @@ jobs:
             cookingsymbols
             xcookybooky
       - name: Link for venv
-        run: cmd.exe /c mklink /j "devenv/bin/activate" "devenv/Scripts/activate"
+        run: cmd.exe /c mklink /j "~/devenv/bin/activate" "~/devenv/Scripts/activate"
       - name: Create devenv
         run: make devenv
         shell: C:\cygwin64\bin\bash.exe --login '{0}'
