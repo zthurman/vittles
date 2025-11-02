@@ -1,0 +1,80 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: vittles ci
+
+on:
+  push:
+    branches: [ "feature/add-ci" ]
+  pull_request:
+    branches: [ "feature/add-ci" ]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test-ubuntu:
+
+    runs-on: ubuntu-latest
+    container: ubuntu 
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies for OS
+        run: |
+          apt-get update
+          apt-get install -y build-essential
+          ./ensure-texlive.sh
+      - name: Create devenv
+        run: make devenv
+      - name: Run tests
+        run: make test
+      - name: Get coverage
+        run: make coverage
+  
+  test-archlinux:
+
+    runs-on: ubuntu-latest
+    container: archlinux 
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies for OS
+        run: |
+          pacman -Syu --noconfirm
+          pacman -Syu --noconfirm base-devel
+          ./ensure-texlive.sh
+      - name: Create devenv
+        run: make devenv
+      - name: Run tests
+        run: make test
+      - name: Get coverage
+        run: make coverage    
+  
+  test-macos:
+
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies for OS
+        run: ./ensure-texlive.sh
+      - name: Create devenv
+        run: make devenv
+      - name: Run tests
+        run: make test
+      - name: Get coverage
+        run: make coverage

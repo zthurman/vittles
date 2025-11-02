@@ -1,4 +1,5 @@
 SHELL:=/bin/bash
+UNAME := $(shell uname)
 
 # Python and venv stuff
 PY = python
@@ -9,13 +10,11 @@ VENV_BIN = $(VENV)/bin
 REQ_DIR = requirements
 REQS = $(REQ_DIR)/requirements.txt
 DEVENV_DIR = devenv
-DEVENV_BIN = $(DEVENV_DIR)/bin
+DEVENV_BIN = ./$(DEVENV_DIR)/bin
 DEVENV_REQS = $(REQ_DIR)/dev-requirements.txt
 XDG = xdg-open
 
-# Use this in clean target in case we
-# try to compile any TeX files without
-# PyLaTeX
+# Use this in clean target in case we # try to compile any TeX files without # PyLaTeX
 LATEX_ARTIFACTS = *.aux *.pdf *.tex *.log *.fdb_latexmk *.fls *.toc
 
 phony: all env book addrecipe devenv test format clean all
