@@ -60,6 +60,40 @@ jobs:
       - name: Get coverage
         run: make coverage    
   
+build-windows:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Cygwin
+        uses: cygwin/cygwin-install-action@v1 # Or another Cygwin installer action
+        with:
+          packages: >
+            bash
+            coreutils
+            perl
+      - name: Install TeX Live
+        uses: zauguin/install-texlive@v4 # Or another TeX Live installer action
+        with:
+          packages: >
+            lmodern
+            textcomp
+            lastpage
+            lettrine
+            cookingsymbols
+            xcookybooky
+      - name: Create devenv
+        run: make devenv
+      - name: Run tests
+        run: make test
+      - name: Get coverage
+        run: make coverage    
+  
   build-macos:
 
     runs-on: macos-latest
