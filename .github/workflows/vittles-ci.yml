@@ -95,6 +95,9 @@ jobs:
         run: dir
       - name: Create devenv
         run: make devenv
+      - name: Debug4
+        run: dir .\devenv\Scripts
+      - name: Create devenv
         #shell: C:\cygwin64\bin\bash.exe --login '{0}'
       - name: Run tests
         run: make test

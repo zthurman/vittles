@@ -38,7 +38,6 @@ book:
 	$(XDG) vittles.pdf
 
 devenv:
-	$(PY) -m $(VENV) $(DEVENV_DIR)
 ifeq ($(OS),Windows_NT)
 	.\$(DEVENV_DIR)\Scripts\activate
 	pip install -r $(REQ_DIR)\dev-requirements.txt
