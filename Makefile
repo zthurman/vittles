@@ -9,7 +9,7 @@ VENV_BIN = $(VENV)/bin
 REQ_DIR = requirements
 REQS = $(REQ_DIR)/requirements.txt
 DEVENV_DIR = devenv
-DEVENV_BIN = $(DEVENV_DIR)/bin
+DEVENV_BIN = ./$(DEVENV_DIR)/bin
 DEVENV_REQS = $(REQ_DIR)/dev-requirements.txt
 XDG = xdg-open
 
@@ -38,9 +38,11 @@ book:
 	$(XDG) vittles.pdf
 
 devenv:
+	$(PY) -m $(VENV) $(DEVENV_DIR)
 ifeq ($(OS),Windows_NT)
 	.\$(DEVENV_DIR)\Scripts\activate
-	pip install -r $(REQ_DIR)\dev-requirements.txt
+	pip.exe install -r $(REQ_DIR)\dev-requirements.txt
+	dir .\$(DEVENV_DIR)\Scripts
 else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/pip install -r $(DEVENV_REQS)
