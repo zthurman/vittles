@@ -38,41 +38,20 @@ book:
 
 devenv:
 	$(PY) -m $(VENV) $(DEVENV_DIR)
-ifeq ($(OS),Windows_NT)
-	.\$(DEVENV_DIR)\Scripts\Activate.ps1
-	pip install -r $(REQ_DIR)\dev-requirements.txt
-	dir .\$(DEVENV_DIR)\Scripts
-else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/pip install -r $(DEVENV_REQS)
-endif
 
 test:
-ifeq ($(OS),Windows_NT)
-	.\$(DEVENV_DIR)\Scripts\Activate.ps1
-	coverage run -m $(TEST) discover
-else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/$(COVERAGE) run -m $(TEST) discover
-endif
 
 coverage:
-ifeq ($(OS),Windows_NT)
-	.\$(DEVENV_DIR)\Scripts\Activate.ps1
-	coverage report
-else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/$(COVERAGE) report
-endif
 
 format:
-ifeq ($(OS),Windows_NT)
-	.\$(DEVENV_DIR)\Scripts\Activate.ps1
-	black .
-else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/black .
-endif
 
 clean:
 ifneq ($(LATEX_ARTIFACTS),)
