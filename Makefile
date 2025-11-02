@@ -39,20 +39,40 @@ book:
 
 devenv:
 	$(PY) -m $(VENV) $(DEVENV_DIR)
+ifeq ($(OS),Windows_NT)
+	call $(DEVENV_DIR)\Scripts\activate.bat
+	$(DEVENV_DIR)\Scripts\pip.exe install -r $(DEVENV_REQS)
+else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/pip install -r $(DEVENV_REQS)
+endif
 
 test:
+ifeq ($(OS),Windows_NT)
+	call $(DEVENV_DIR)\Scripts\activate.bat
+	$(DEVENV_DIR)\Scripts\coverage.exe run -m $(TEST) discover
+else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/$(COVERAGE) run -m $(TEST) discover
+endif
 
 coverage:
+ifeq ($(OS),Windows_NT)
+	call $(DEVENV_DIR)\Scripts\activate.bat
+	$(DEVENV_DIR)\Scripts\coverage.exe report
+else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/$(COVERAGE) report
+endif
 
 format:
+ifeq ($(OS),Windows_NT)
+	call $(DEVENV_DIR)\Scripts\activate.bat
+	$(DEVENV_DIR)\Scripts\black.exe .
+else
 	. $(DEVENV_BIN)/activate
 	$(DEVENV_BIN)/black .
+endif
 
 clean:
 ifneq ($(LATEX_ARTIFACTS),)

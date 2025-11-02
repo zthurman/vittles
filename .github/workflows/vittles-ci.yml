@@ -14,7 +14,7 @@ permissions:
 
 jobs:
 
-  build-ubuntu:
+  test-ubuntu:
 
     runs-on: ubuntu-latest
     container: ubuntu 
@@ -37,7 +37,7 @@ jobs:
       - name: Get coverage
         run: make coverage
   
-  build-archlinux:
+  test-archlinux:
 
     runs-on: ubuntu-latest
     container: archlinux 
@@ -60,7 +60,7 @@ jobs:
       - name: Get coverage
         run: make coverage    
   
-  build-windows:
+  test-windows:
 
     runs-on: windows-latest
 
@@ -87,8 +87,6 @@ jobs:
             lettrine
             cookingsymbols
             xcookybooky
-      - name: Link for venv
-        run: cmd.exe /c mklink /j "~/devenv/bin/activate" "~/devenv/Scripts/activate"
       - name: Create devenv
         run: make devenv
         shell: C:\cygwin64\bin\bash.exe --login '{0}'
@@ -99,7 +97,7 @@ jobs:
         run: make coverage    
         shell: C:\cygwin64\bin\bash.exe --login '{0}'
   
-  build-macos:
+  test-macos:
 
     runs-on: macos-latest
 
