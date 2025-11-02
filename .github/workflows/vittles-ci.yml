@@ -89,10 +89,13 @@ jobs:
             xcookybooky
       - name: Create devenv
         run: make devenv
+        shell: C:\cygwin64\bin\bash.exe --login '{0}'
       - name: Run tests
         run: make test
+        shell: C:\cygwin64\bin\bash.exe --login '{0}'
       - name: Get coverage
         run: make coverage    
+        shell: C:\cygwin64\bin\bash.exe --login '{0}'
   
   build-macos:
 
