@@ -176,3 +176,41 @@ class TestVittles(unittest.TestCase):
             + self.document_validation_doc_tag_suffix
         )
         self.assertEqual(test.dumps(), validation)
+
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testMakeTitleAndToc(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir)
+        test.make_title_and_toc()
+        title_and_toc_validation = (
+            f"\\maketitle%\n"
+            f"\\clearpage%\n"
+            f"\\tableofcontents%\n"
+            f"\\clearpage%\n"
+        )
+        validation = (
+            self.document_validation_prefix
+            + "%\n"
+            + "%\n"
+            + self.document_validation_doc_tag_prefix
+            + title_and_toc_validation
+            + self.document_validation_doc_tag_suffix
+        )
+        self.assertEqual(test.dumps(), validation)
