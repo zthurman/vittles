@@ -84,6 +84,13 @@ class Vittles(Document):
         self.append(TableOfContents())
         self.append(ClearPage())
 
+    def assemble_recipe_options(self, recipe: Recipe):
+        recipe_options = list()
+        recipe_options.append(NoEscape(rf"portion={{{recipe.servings}}} servings"))
+        recipe_options.append(NoEscape(rf"preparationtime={{{recipe.preptime}}}"))
+        recipe_options.append(NoEscape(rf"bakingtime={{{recipe.cooktime}}}"))
+        return recipe_options
+
     def fill_document(self):
         self.add_packages_to_preamble()
         self.add_title_author_date_to_preamble()
@@ -94,21 +101,16 @@ class Vittles(Document):
                     recipe = JsonRecipeImporter(
                         input_recipe=f"{self.recipe_path}/{category.lower()}/{recipe_file}"
                     )
-                    with self.create(Recipe()):
+                    with self.create(
+                        Recipe(options=self.assemble_recipe_options(recipe))
+                    ):
                         raw_title = rf"{{{recipe.title}}}"
                         self.append(NoEscape(raw_title))
-                        self.append(
-                            Portion(
-                                arguments=NoEscape(
-                                    rf"\Dish\enspace{{{recipe.servings}}}"
-                                )
-                            )
-                        )
                         with self.create(Preparation()):
                             with self.create(Enumerate()) as enum:
                                 for step in recipe.directions:
                                     enum.add_item(step)
-                            # I don't know why Step horks the compile
+                            # I don't know why Step horks the tex compile
                             # I think I'm doing what xcookybooky tells
                             # me to do
                             # for step in recipe.directions:

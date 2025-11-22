@@ -20,8 +20,9 @@ import unittest
 import os
 import json
 from hypothesis import given, settings, strategies as st
+from pylatex.utils import NoEscape
 
-from vittles.recipe import REQUIRED_KEYS
+from vittles.recipe import REQUIRED_KEYS, JsonRecipeImporter
 
 from vittles.pylatex import Vittles
 
@@ -214,3 +215,36 @@ class TestVittles(unittest.TestCase):
             + self.document_validation_doc_tag_suffix
         )
         self.assertEqual(test.dumps(), validation)
+
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testAssembleRecipeOptions(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir)
+        for category, recipe_files in test.available_recipes.items():
+            for recipe_file in recipe_files:
+                recipe = JsonRecipeImporter(
+                    input_recipe=f"{test.recipe_path}/{recipe_file}"
+                )
+                recipe_options = test.assemble_recipe_options(recipe)
+                validation = list()
+                validation.append(NoEscape(rf"portion={{{recipe.servings}}} servings"))
+                validation.append(NoEscape(rf"preparationtime={{{recipe.preptime}}}"))
+                validation.append(NoEscape(rf"bakingtime={{{recipe.cooktime}}}"))
+                self.assertEqual(recipe_options, validation)
