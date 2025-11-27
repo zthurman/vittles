@@ -179,7 +179,7 @@ class TestVittles(unittest.TestCase):
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
-        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
         validation = (
             self.document_validation_prefix
             + self.document_validation_line_ending
@@ -210,7 +210,7 @@ class TestVittles(unittest.TestCase):
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
-        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
         test.add_packages_to_preamble()
         packages_validation = (
             f"\\usepackage{{lettrine}}%\n"
@@ -248,10 +248,7 @@ class TestVittles(unittest.TestCase):
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test = Vittles(recipe_path=test_recipe_dir, image_path=self.test_file_root)
         test.add_title_to_preamble()
-        title_validation = (
-            f"\\title{{Vittles}}%\n"
-            f"%\n"
-        )
+        title_validation = f"\\title{{Vittles}}%\n" f"%\n"
         validation = (
             self.document_validation_prefix
             + title_validation
@@ -259,7 +256,7 @@ class TestVittles(unittest.TestCase):
             + self.document_validation_doc_tag_suffix
         )
         self.assertEqual(test.dumps(), validation)
-    
+
     @given(
         st.fixed_dictionaries(
             mapping=dict.fromkeys(
@@ -302,7 +299,7 @@ class TestVittles(unittest.TestCase):
             + self.document_validation_doc_tag_suffix
         )
         self.assertEqual(test.dumps(), validation)
-    
+
     @given(
         st.fixed_dictionaries(
             mapping=dict.fromkeys(
@@ -324,12 +321,9 @@ class TestVittles(unittest.TestCase):
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
-        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
         test.add_author_to_preamble()
-        author_validation = (
-            f"\\author{{Zam}}%\n"
-            f"%\n"
-        )
+        author_validation = f"\\author{{Zam}}%\n" f"%\n"
         validation = (
             self.document_validation_prefix
             + author_validation
@@ -337,7 +331,7 @@ class TestVittles(unittest.TestCase):
             + self.document_validation_doc_tag_suffix
         )
         self.assertEqual(test.dumps(), validation)
-    
+
     @given(
         st.fixed_dictionaries(
             mapping=dict.fromkeys(
@@ -359,12 +353,9 @@ class TestVittles(unittest.TestCase):
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
-        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
         test.add_date_to_preamble()
-        date_validation = (
-            f"\\date{{\\today}}%\n"
-            f"%\n"
-        )
+        date_validation = f"\\date{{\\today}}%\n" f"%\n"
         validation = (
             self.document_validation_prefix
             + date_validation
@@ -394,7 +385,7 @@ class TestVittles(unittest.TestCase):
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
-        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
         test.make_title()
         test.make_toc()
         title_and_toc_validation = (
@@ -434,7 +425,7 @@ class TestVittles(unittest.TestCase):
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
-        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
         for category, recipe_files in test.available_recipes.items():
             for recipe_file in recipe_files:
                 recipe = JsonRecipeImporter(

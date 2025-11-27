@@ -54,14 +54,14 @@ class TestIngredient(unittest.TestCase):
         self.assertEqual(test.quantity, f"{i} {str(Fraction(f))}")
         self.assertEqual(test.unit, f"{unit}")
         self.assertEqual(test.name, f"{name}")
-    
+
     def testIngredientWithPercent(self):
         ingredient = f"1 lb 93% ground beef"
         test = Ingredient(ingredient)
         self.assertEqual(test.quantity, "1")
         self.assertEqual(test.unit, "lb")
         self.assertEqual(test.name, "93% ground beef")
-    
+
     def testIngredientEq(self):
         ingredient = f"1 lb 93% ground beef"
         test = Ingredient(ingredient)
