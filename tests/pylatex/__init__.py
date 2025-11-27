@@ -82,7 +82,8 @@ class TestVittles(unittest.TestCase):
             json.dump(test_dict, test_file, indent=4)
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
-        test = Vittles(recipe_path=test_recipe_dir)
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
         self.assertEqual(test.recipe_path, test_recipe_dir)
         self.assertEqual(
             test.recipe_path_contents, os.listdir(os.path.dirname(self.test_json_file))
@@ -177,7 +178,8 @@ class TestVittles(unittest.TestCase):
             json.dump(test_dict, test_file, indent=4)
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
-        test = Vittles(recipe_path=test_recipe_dir)
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
         validation = (
             self.document_validation_prefix
             + self.document_validation_line_ending
@@ -207,7 +209,8 @@ class TestVittles(unittest.TestCase):
             json.dump(test_dict, test_file, indent=4)
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
-        test = Vittles(recipe_path=test_recipe_dir)
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
         test.add_packages_to_preamble()
         packages_validation = (
             f"\\usepackage{{lettrine}}%\n"
@@ -320,7 +323,8 @@ class TestVittles(unittest.TestCase):
             json.dump(test_dict, test_file, indent=4)
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
-        test = Vittles(recipe_path=test_recipe_dir)
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
         test.add_author_to_preamble()
         author_validation = (
             f"\\author{{Zam}}%\n"
@@ -354,7 +358,8 @@ class TestVittles(unittest.TestCase):
             json.dump(test_dict, test_file, indent=4)
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
-        test = Vittles(recipe_path=test_recipe_dir)
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
         test.add_date_to_preamble()
         date_validation = (
             f"\\date{{\\today}}%\n"
@@ -388,7 +393,8 @@ class TestVittles(unittest.TestCase):
             json.dump(test_dict, test_file, indent=4)
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
-        test = Vittles(recipe_path=test_recipe_dir)
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
         test.make_title()
         test.make_toc()
         title_and_toc_validation = (
@@ -427,7 +433,8 @@ class TestVittles(unittest.TestCase):
             json.dump(test_dict, test_file, indent=4)
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
-        test = Vittles(recipe_path=test_recipe_dir)
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path = test_image_dir)
         for category, recipe_files in test.available_recipes.items():
             for recipe_file in recipe_files:
                 recipe = JsonRecipeImporter(
