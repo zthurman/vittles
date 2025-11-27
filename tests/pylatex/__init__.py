@@ -22,6 +22,8 @@ import unittest
 import os
 import json
 from hypothesis import given, settings, strategies as st
+from PIL import Image
+
 from pylatex.utils import NoEscape
 
 from vittles.recipe import REQUIRED_KEYS, JsonRecipeImporter
@@ -31,7 +33,13 @@ from vittles.pylatex import Vittles
 
 class TestVittles(unittest.TestCase):
     def setUp(self):
-        self.test_json_file = "tests/test.json"
+        self.test_file_root = "tests"
+        self.test_json_file = f"{self.test_file_root}/test.json"
+        self.image_width = 640
+        self.image_height = 480
+        self.image_color = "blue"
+        self.test_title_image_file = f"{self.test_file_root}/title.jpg"
+        self.test_image_file = f"{self.test_file_root}/test.jpg"
         self.document_validation_prefix = (
             f"\\documentclass{{article}}%\n"
             f"\\usepackage[T1]{{fontenc}}%\n"
@@ -49,6 +57,10 @@ class TestVittles(unittest.TestCase):
 
     def tearDown(self):
         os.remove(self.test_json_file)
+        if os.path.exists(self.test_image_file):
+            os.remove(self.test_image_file)
+        if os.path.exists(self.test_title_image_file):
+            os.remove(self.test_title_image_file)
 
     @given(
         st.fixed_dictionaries(
@@ -77,6 +89,73 @@ class TestVittles(unittest.TestCase):
         )
         self.assertEqual(len(test.available_categories), 0)
         self.assertEqual(len(test.available_recipes), 1)
+
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testImagePathForRecipeImage(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+        test_image = Image.new(
+            "RGB", (self.image_width, self.image_height), self.image_color
+        )
+        test_image.save(self.test_image_file)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
+        self.assertEqual(test.image_path, test_image_dir)
+        self.assertEqual(
+            test.image_path_contents, os.listdir(os.path.dirname(self.test_image_file))
+        )
+        self.assertEqual(test.title_image(), None)
+
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testImagePathForTitleImage(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+        test_image = Image.new(
+            "RGB", (self.image_width, self.image_height), self.image_color
+        )
+        test_image.save(self.test_title_image_file)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test_image_dir = os.path.dirname(os.path.abspath(self.test_title_image_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
+        self.assertEqual(test.image_path, test_image_dir)
+        self.assertEqual(
+            test.image_path_contents,
+            os.listdir(os.path.dirname(self.test_title_image_file)),
+        )
+        self.assertEqual(
+            test.title_image(), os.path.abspath(self.test_title_image_file)
+        )
 
     @given(
         st.fixed_dictionaries(
@@ -159,27 +238,131 @@ class TestVittles(unittest.TestCase):
             )
         ),
     )
-    def testAddTitleAuthorDateToPreamble(self, test_dict):
+    def testAddTitleToPreambleNoTitleImage(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path=self.test_file_root)
+        test.add_title_to_preamble()
+        title_validation = (
+            f"\\title{{Vittles}}%\n"
+            f"%\n"
+        )
+        validation = (
+            self.document_validation_prefix
+            + title_validation
+            + self.document_validation_doc_tag_prefix
+            + self.document_validation_doc_tag_suffix
+        )
+        self.assertEqual(test.dumps(), validation)
+    
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testAddTitleToPreambleWithTitleImage(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+        test_image = Image.new(
+            "RGB", (self.image_width, self.image_height), self.image_color
+        )
+        test_image.save(self.test_title_image_file)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir, image_path=self.test_file_root)
+        test.add_title_to_preamble()
+        title_validation = (
+            f"\\title{{%\n"
+            f"Vittles%\n"
+            f"\\begin{{center}}%\n"
+            f"\\includegraphics[angle=-90,scale=0.1]{{{os.path.abspath(self.test_title_image_file)}}}%\n"
+            f"\\end{{center}}%\n"
+            f"}}%\n"
+            f"%\n"
+        )
+        validation = (
+            self.document_validation_prefix
+            + title_validation
+            + self.document_validation_doc_tag_prefix
+            + self.document_validation_doc_tag_suffix
+        )
+        self.assertEqual(test.dumps(), validation)
+    
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testAddAuthorToPreamble(self, test_dict):
         with open(self.test_json_file, "w") as test_file:
             json.dump(test_dict, test_file, indent=4)
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test = Vittles(recipe_path=test_recipe_dir)
-        test.add_title_author_date_to_preamble()
-        title_author_date_validation = (
-            f"\\title{{%\n"
-            f"Vittles%\n"
-            f"\\begin{{center}}%\n"
-            f"\\includegraphics[angle=-90,scale=0.1]{{/home/lappy/src/vittles/img/title.jpg}}%\n"
-            f"\\end{{center}}%\n"
-            f"}}%\n"
+        test.add_author_to_preamble()
+        author_validation = (
             f"\\author{{Zam}}%\n"
+            f"%\n"
+        )
+        validation = (
+            self.document_validation_prefix
+            + author_validation
+            + self.document_validation_doc_tag_prefix
+            + self.document_validation_doc_tag_suffix
+        )
+        self.assertEqual(test.dumps(), validation)
+    
+    @given(
+        st.fixed_dictionaries(
+            mapping=dict.fromkeys(
+                REQUIRED_KEYS,
+                st.text(
+                    alphabet=st.characters(
+                        codec="latin-1",
+                        min_codepoint=0x41,
+                        max_codepoint=0x5A,
+                    ),
+                    min_size=1,
+                ),
+            )
+        ),
+    )
+    def testAddDateToPreamble(self, test_dict):
+        with open(self.test_json_file, "w") as test_file:
+            json.dump(test_dict, test_file, indent=4)
+
+        test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
+        test = Vittles(recipe_path=test_recipe_dir)
+        test.add_date_to_preamble()
+        date_validation = (
             f"\\date{{\\today}}%\n"
             f"%\n"
         )
         validation = (
             self.document_validation_prefix
-            + title_author_date_validation
+            + date_validation
             + self.document_validation_doc_tag_prefix
             + self.document_validation_doc_tag_suffix
         )
@@ -206,7 +389,8 @@ class TestVittles(unittest.TestCase):
 
         test_recipe_dir = os.path.dirname(os.path.abspath(self.test_json_file))
         test = Vittles(recipe_path=test_recipe_dir)
-        test.make_title_and_toc()
+        test.make_title()
+        test.make_toc()
         title_and_toc_validation = (
             f"\\maketitle%\n"
             f"\\clearpage%\n"

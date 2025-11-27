@@ -39,14 +39,26 @@ from vittles.pylatex.extensions import (
 
 
 class Vittles(Document):
-    def __init__(self, recipe_path: str = "json", image_path: str = "img"):
+    def __init__(
+        self,
+        recipe_path: str = "json",
+        image_path: str = "img",
+        title_image_name: str = "title.jpg",
+    ):
         super().__init__()
         self.recipe_path = recipe_path
         self.recipe_path_contents = os.listdir(self.recipe_path)
         self.image_path = image_path
         self.image_path_contents = os.listdir(self.image_path)
+        self.title_image_name = title_image_name
         self.find_available_categories()
         self.find_available_recipes()
+
+    def title_image(self):
+        if self.title_image_name in self.image_path_contents:
+            return os.path.abspath(f"{self.image_path}/{self.title_image_name}")
+        else:
+            return None
 
     def find_available_categories(self):
         self.available_categories = list()
@@ -97,23 +109,30 @@ class Vittles(Document):
         if shorten_following_vspace:
             append_target.append(NoEscape(rf"\vspace{{{shorten_following_vspace}em}}"))
 
-    def add_title_author_date_to_preamble(self):
-        title_image = os.path.abspath(f"{self.image_path}/title.jpg")
-        if os.path.exists(title_image):
+    def add_title_to_preamble(self):
+        if self.title_image():
             self.preamble.append(NoEscape(r"\title{"))
             self.preamble.append(NoEscape(r"Vittles"))
             self.append_centered_image(
-                append_target=self.preamble, image=title_image, image_rotation=-90
+                append_target=self.preamble,
+                image=self.title_image(),
+                image_rotation=-90,
             )
             self.preamble.append(NoEscape(r"}"))
         else:
             self.preamble.append(Title("Vittles"))
+
+    def add_author_to_preamble(self):
         self.preamble.append(Command("author", "Zam"))
+
+    def add_date_to_preamble(self):
         self.preamble.append(Command("date", NoEscape(r"\today")))
 
-    def make_title_and_toc(self):
+    def make_title(self):
         self.append(MakeTitle())
         self.append(ClearPage())
+
+    def make_toc(self):
         self.append(TableOfContents())
         self.append(ClearPage())
 
@@ -126,8 +145,11 @@ class Vittles(Document):
 
     def fill_document(self):
         self.add_packages_to_preamble()
-        self.add_title_author_date_to_preamble()
-        self.make_title_and_toc()
+        self.add_title_to_preamble()
+        self.add_author_to_preamble()
+        self.add_date_to_preamble()
+        self.make_title()
+        self.make_toc()
         for category, recipes in self.available_recipes.items():
             with self.create(Section(category)):
                 for recipe_file in recipes:
