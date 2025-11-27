@@ -77,15 +77,37 @@ class Vittles(Document):
         self.preamble.append(Package("cookingsymbols"))
         self.preamble.append(Package("xcookybooky"))
 
+    def append_centered_image(
+        self,
+        append_target,
+        image,
+        image_rotation: int = None,
+        shorten_following_vspace: int = None,
+    ):
+        append_target.append(NoEscape(r"\begin{center}"))
+        if image_rotation:
+            append_target.append(
+                NoEscape(
+                    rf"\includegraphics[angle={image_rotation},scale=0.1]{{{image}}}"
+                )
+            )
+        else:
+            append_target.append(NoEscape(rf"\includegraphics[scale=0.1]{{{image}}}"))
+        append_target.append(NoEscape(r"\end{center}"))
+        if shorten_following_vspace:
+            append_target.append(NoEscape(rf"\vspace{{{shorten_following_vspace}em}}"))
+
     def add_title_author_date_to_preamble(self):
         title_image = os.path.abspath(f"{self.image_path}/title.jpg")
-        self.append(NoEscape(r"\title{"))
-        self.append(NoEscape(r"Vittles"))
-        self.append(NoEscape(r"\begin{center}"))
-        self.append(NoEscape(rf"\includegraphics[angle=-90,scale=0.1]{{{title_image}}}"))
-        self.append(NoEscape(r"\end{center}"))
-        self.append(NoEscape(r"}"))
-        #self.preamble.append(Title("Vittles", options=NoEscape(rf"\includegraphics[scale=0.1]{{{title_image}}}")))
+        if os.path.exists(title_image):
+            self.preamble.append(NoEscape(r"\title{"))
+            self.preamble.append(NoEscape(r"Vittles"))
+            self.append_centered_image(
+                append_target=self.preamble, image=title_image, image_rotation=-90
+            )
+            self.preamble.append(NoEscape(r"}"))
+        else:
+            self.preamble.append(Title("Vittles"))
         self.preamble.append(Command("author", "Zam"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
 
@@ -117,13 +139,16 @@ class Vittles(Document):
                     ):
                         raw_title = rf"{{{recipe.title}}}"
                         self.append(NoEscape(raw_title))
-                        recipe_image = os.path.abspath(f"{self.image_path}/{recipe_file.split('.')[0]}.jpg")
+                        recipe_image = os.path.abspath(
+                            f"{self.image_path}/{recipe_file.split('.')[0]}.jpg"
+                        )
                         if os.path.exists(recipe_image):
                             print(f"recipe image exists: {recipe_image}")
-                            self.append(NoEscape(r"\begin{center}"))
-                            self.append(NoEscape(rf"\includegraphics[scale=0.1]{{{recipe_image}}}"))
-                            self.append(NoEscape(r"\end{center}"))
-                            self.append(NoEscape(r"\vspace{-4em}"))
+                            self.append_centered_image(
+                                append_target=self,
+                                image=recipe_image,
+                                shorten_following_vspace=-4,
+                            )
                         else:
                             print(f"recipe image does NOT exist: {recipe_file}")
                         with self.create(Preparation()):
