@@ -155,3 +155,7 @@ cython_debug/
 *.aux
 *.tex
 *.pdf
+
+# recipe book images
+img/
+cython_debug/

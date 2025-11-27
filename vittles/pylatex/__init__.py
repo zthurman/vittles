@@ -39,10 +39,12 @@ from vittles.pylatex.extensions import (
 
 
 class Vittles(Document):
-    def __init__(self, recipe_path: str = "json"):
+    def __init__(self, recipe_path: str = "json", image_path: str = "img"):
         super().__init__()
         self.recipe_path = recipe_path
         self.recipe_path_contents = os.listdir(self.recipe_path)
+        self.image_path = image_path
+        self.image_path_contents = os.listdir(self.image_path)
         self.find_available_categories()
         self.find_available_recipes()
 
@@ -76,7 +78,14 @@ class Vittles(Document):
         self.preamble.append(Package("xcookybooky"))
 
     def add_title_author_date_to_preamble(self):
-        self.preamble.append(Title("Vittles"))
+        title_image = os.path.abspath(f"{self.image_path}/title.jpg")
+        self.append(NoEscape(r"\title{"))
+        self.append(NoEscape(r"Vittles"))
+        self.append(NoEscape(r"\begin{center}"))
+        self.append(NoEscape(rf"\includegraphics[angle=-90,scale=0.1]{{{title_image}}}"))
+        self.append(NoEscape(r"\end{center}"))
+        self.append(NoEscape(r"}"))
+        #self.preamble.append(Title("Vittles", options=NoEscape(rf"\includegraphics[scale=0.1]{{{title_image}}}")))
         self.preamble.append(Command("author", "Zam"))
         self.preamble.append(Command("date", NoEscape(r"\today")))
 
@@ -108,6 +117,15 @@ class Vittles(Document):
                     ):
                         raw_title = rf"{{{recipe.title}}}"
                         self.append(NoEscape(raw_title))
+                        recipe_image = os.path.abspath(f"{self.image_path}/{recipe_file.split('.')[0]}.jpg")
+                        if os.path.exists(recipe_image):
+                            print(f"recipe image exists: {recipe_image}")
+                            self.append(NoEscape(r"\begin{center}"))
+                            self.append(NoEscape(rf"\includegraphics[scale=0.1]{{{recipe_image}}}"))
+                            self.append(NoEscape(r"\end{center}"))
+                            self.append(NoEscape(r"\vspace{-4em}"))
+                        else:
+                            print(f"recipe image does NOT exist: {recipe_file}")
                         with self.create(Preparation()):
                             with self.create(Enumerate()) as enum:
                                 for step in recipe.directions:
