@@ -113,13 +113,15 @@ class Vittles(Document):
         image_scale: float = None,
         shorten_following_vspace: int = None,
     ):
-        options = list()
         append_target.append(NoEscape(r"\begin{center}"))
+        options = list()
         if image_rotation:
             options.append(f"angle={image_rotation}")
         if image_scale:
             options.append(f"scale={image_scale}")
-        append_target.append(NoEscape(rf"\includegraphics[{",".join(options)}]{{{image}}}"))
+        append_target.append(
+            NoEscape(rf"\includegraphics[{",".join(options)}]{{{image}}}")
+        )
         append_target.append(NoEscape(r"\end{center}"))
         if shorten_following_vspace:
             append_target.append(NoEscape(rf"\vspace{{{shorten_following_vspace}em}}"))
@@ -138,7 +140,7 @@ class Vittles(Document):
                     image_rotation=title_image_params["rotation"],
                 )
             else:
-                #print("No image params found, trying defaults")
+                # print("No image params found, trying defaults")
                 self.append_centered_image(
                     append_target=self.preamble,
                     image=self.title_image(),
@@ -193,6 +195,7 @@ class Vittles(Document):
                         )
                         if os.path.exists(recipe_image):
                             print(f"recipe image exists: {recipe_image}")
+                            # TODO: neckbeard hax, clean up next line
                             image_param_key = recipe_image.split(".")[0].split("/")[-1]
                             recipe_image_params = self.image_params[image_param_key]
                             self.append_centered_image(
