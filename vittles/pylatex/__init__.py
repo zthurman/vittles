@@ -19,6 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import os
+import json
 
 from pylatex import Command, Document, Section, Package, Enumerate, Tabular
 from pylatex.base_classes import Environment, ContainerCommand, CommandBase, LatexObject
@@ -44,6 +45,7 @@ class Vittles(Document):
         recipe_path: str = "json",
         image_path: str = "img",
         title_image_name: str = "title.jpg",
+        image_params_name: str = "image-params.json",
     ):
         super().__init__()
         self.recipe_path = recipe_path
@@ -51,6 +53,10 @@ class Vittles(Document):
         self.image_path = image_path
         self.image_path_contents = os.listdir(self.image_path)
         self.title_image_name = title_image_name
+        self.image_params_name = image_params_name
+        self.load_image_params()
+        self.default_image_scale = 0.1
+        self.default_image_rotation = None
         self.find_available_categories()
         self.find_available_recipes()
 
@@ -59,6 +65,16 @@ class Vittles(Document):
             return os.path.abspath(f"{self.image_path}/{self.title_image_name}")
         else:
             return None
+
+    def load_image_params(self):
+        if self.image_params_name in self.image_path_contents:
+            image_params_file = os.path.abspath(
+                f"{self.image_path}/{self.image_params_name}"
+            )
+            with open(image_params_file, "r") as file:
+                self.image_params = json.load(file)
+        else:
+            self.image_params = None
 
     def find_available_categories(self):
         self.available_categories = list()
@@ -94,17 +110,16 @@ class Vittles(Document):
         append_target,
         image,
         image_rotation: int = None,
+        image_scale: float = None,
         shorten_following_vspace: int = None,
     ):
+        options = list()
         append_target.append(NoEscape(r"\begin{center}"))
         if image_rotation:
-            append_target.append(
-                NoEscape(
-                    rf"\includegraphics[angle={image_rotation},scale=0.1]{{{image}}}"
-                )
-            )
-        else:
-            append_target.append(NoEscape(rf"\includegraphics[scale=0.1]{{{image}}}"))
+            options.append(f"angle={image_rotation}")
+        if image_scale:
+            options.append(f"scale={image_scale}")
+        append_target.append(NoEscape(rf"\includegraphics[{",".join(options)}]{{{image}}}"))
         append_target.append(NoEscape(r"\end{center}"))
         if shorten_following_vspace:
             append_target.append(NoEscape(rf"\vspace{{{shorten_following_vspace}em}}"))
@@ -113,11 +128,23 @@ class Vittles(Document):
         if self.title_image():
             self.preamble.append(NoEscape(r"\title{"))
             self.preamble.append(NoEscape(r"Vittles"))
-            self.append_centered_image(
-                append_target=self.preamble,
-                image=self.title_image(),
-                image_rotation=-90,
-            )
+            if self.image_params:
+                stripped_title_image = self.title_image_name.split(".")[0]
+                title_image_params = self.image_params[stripped_title_image]
+                self.append_centered_image(
+                    append_target=self.preamble,
+                    image=self.title_image(),
+                    image_scale=title_image_params["scale"],
+                    image_rotation=title_image_params["rotation"],
+                )
+            else:
+                #print("No image params found, trying defaults")
+                self.append_centered_image(
+                    append_target=self.preamble,
+                    image=self.title_image(),
+                    image_scale=self.default_image_scale,
+                    image_rotation=self.default_image_rotation,
+                )
             self.preamble.append(NoEscape(r"}"))
         else:
             self.preamble.append(Title("Vittles"))
@@ -166,10 +193,16 @@ class Vittles(Document):
                         )
                         if os.path.exists(recipe_image):
                             print(f"recipe image exists: {recipe_image}")
+                            image_param_key = recipe_image.split(".")[0].split("/")[-1]
+                            recipe_image_params = self.image_params[image_param_key]
                             self.append_centered_image(
                                 append_target=self,
                                 image=recipe_image,
-                                shorten_following_vspace=-4,
+                                image_scale=recipe_image_params["scale"],
+                                image_rotation=recipe_image_params["rotation"],
+                                shorten_following_vspace=recipe_image_params[
+                                    "following_vspace"
+                                ],
                             )
                         else:
                             print(f"recipe image does NOT exist: {recipe_file}")

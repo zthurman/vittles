@@ -44,3 +44,17 @@ class RecipeAdder:
     def writeToJson(self):
         with open(self.filename(), "w") as json_file:
             json.dump(self.input_recipe, json_file, indent=4)
+
+
+class ImageParamsAdder:
+    def __init__(self, image_params_dict: dict, image_dir: str = "img"):
+        self.image_params_dict = image_params_dict
+        self.image_dir = os.path.abspath(image_dir)
+
+    def filename(self):
+        filename = f"{self.image_dir}/image-params.json"
+        return filename
+
+    def writeToJson(self):
+        with open(self.filename(), "w") as json_file:
+            json.dump(self.image_params_dict, json_file, indent=4)

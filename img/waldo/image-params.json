@@ -1,0 +1,47 @@
+{
+    "barbacoa-brisket": {
+        "scale": 0.08,
+        "rotation": -90,
+        "following_vspace": -3
+    },
+    "ropa-vieja": {
+        "scale": null,
+        "rotation": null,
+        "following_vspace": null
+    },
+    "easy-pulled-pork": {
+        "scale": 0.09,
+        "rotation": -90,
+        "following_vspace": -3
+    },
+    "dorito-casserole": {
+        "scale": 0.1,
+        "rotation": null,
+        "following_vspace": null
+    },
+    "beef-ragu-with-warm-spices": {
+        "scale": 0.09,
+        "rotation": -90,
+        "following_vspace": -3 
+    },
+    "crockpot-picadillo": {
+        "scale": 0.09,
+        "rotation": null,
+        "following_vspace": -4
+    },
+    "salmar's-pork-and-mushroom-pasta": {
+        "scale": 0.1,
+        "rotation": null,
+        "following_vspace": -4 
+    },
+    "slow-cooker-enchilada-quinoa": {
+        "scale": 0.1,
+        "rotation": null,
+        "following_vspace": -3
+    },
+    "title": {
+        "scale": 1.0,
+        "rotation": null,
+        "following_vspace": null
+    }
+}

@@ -287,7 +287,7 @@ class TestVittles(unittest.TestCase):
             f"\\title{{%\n"
             f"Vittles%\n"
             f"\\begin{{center}}%\n"
-            f"\\includegraphics[angle=-90,scale=0.1]{{{os.path.abspath(self.test_title_image_file)}}}%\n"
+            f"\\includegraphics[scale=0.1]{{{os.path.abspath(self.test_title_image_file)}}}%\n"
             f"\\end{{center}}%\n"
             f"}}%\n"
             f"%\n"

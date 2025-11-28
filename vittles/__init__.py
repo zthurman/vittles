@@ -20,5 +20,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from vittles.ingredient import Ingredient
 from vittles.recipe import JsonRecipeImporter
-from vittles.utils import RecipeAdder
+from vittles.utils import RecipeAdder, ImageParamsAdder
 from vittles.pylatex import Vittles
