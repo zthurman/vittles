@@ -4,35 +4,42 @@ from vittles.utils import RecipeAdder, ImageParamsAdder
 from vittles import Vittles
 
 add_recipe = {
-    "Title": "Slow Cooker Enchilada Quinoa",
-    "Prep Time": "15 mins",
-    "Cook Time": "4-7 hours",
+    "Title": "Black Bean and Sweet Potato Quesadillas",
+    "Prep Time": "20 mins",
+    "Cook Time": "1 hour",
     "Servings": "4",
     "Ingredients": [
-        "1 15oz can black beans",
-        "1 15oz can yellow corn",
-        "2 15oz cans red enchilada sauce",
-        "1 15oz can fire roasted tomatoes and green chiles",
-        "1 cup uncooked quinoa",
-        "1/2 cup water",
-        "4 oz cream cheese",
-        "1 12 oz ball of oaxaca cheese, shredded",
+        "1 large sweet potato",
+        "1 cup salsa",
+        "1 cup cooked brown rice",
+        "1 cup fresh spinach",
+        "1 can refried beans",
+        "1 can black beans",
+        "1/4 tsp onion powder",
+        "1/4 tsp chili powder",
+        "1/4 tsp cumin",
+        "8 whole tortillas",
     ],
     "Directions": [
-        "Add beans, corn, 1 can of enchilada sauce, dice tomatoes and chiles, quinoa, water, and cubed cream cheese to the slow cooker. Stir everything together."
-        "Pour remaining can of enchilada sauce on top, then cover with the shredded cheese. Cover and cook 4-5 hours on high or 5-7 hours on low."
-        "Uncover and top with favorite toppings."
+        "Preheat oven to 375 F. Prepare a sheet pan with parchment paper.",
+        "An hour before eating, peel and chop the sweet potatoes. Bake sweet potatoes in oven for 45 minutes, until soft. While those are cooking, cook the rice.",
+        "When sweet potatoes are finished, place in food processor or blender. Blend potatoes with rice, salsa and spinach.",
+        "Transfer sweet potato mash into sauce pan with black and refried beans. Heat mixture over medium and add onion and chili powders and cumin.",
+        "Place tortilla on griddle or frying pan at medium heat, slathering with sweet potato bean mixture. Place another tortilla on top. Cook for three minutes, then flip and cook for another three minutes.",
+        "Remove from griddle or grying pan nad cut into desired sections. Serve with preferred toppings."
     ],
 }
 
+# TODO: Make a util component that will autogen this
+# based on the contents of json dir.
 image_params = {
     "barbacoa-brisket": {
-        "scale": 0.08,
-        "rotation": -90,
-        "following_vspace": -3,
+        "scale": None,
+        "rotation": None,
+        "following_vspace": None,
     },
     "ropa-vieja": {"scale": None, "rotation": None, "following_vspace": None},
-    "easy-pulled-pork": {"scale": 0.1, "rotation": -90, "following_vspace": -3},
+    "easy-pulled-pork": {"scale": None, "rotation": None, "following_vspace": None},
     "dorito-casserole": {
         "scale": None,
         "rotation": None,
@@ -44,9 +51,9 @@ image_params = {
         "following_vspace": None,
     },
     "crockpot-picadillo": {
-        "scale": 0.1,
+        "scale": None,
         "rotation": None,
-        "following_vspace": -4,
+        "following_vspace": None,
     },
     "salmar's-pork-and-mushroom-pasta": {
         "scale": None,
@@ -54,11 +61,11 @@ image_params = {
         "following_vspace": None,
     },
     "slow-cooker-enchilada-quinoa": {
-        "scale": 0.1,
+        "scale": None,
         "rotation": None,
-        "following_vspace": -3,
+        "following_vspace": None,
     },
-    "title": {"scale": 0.1, "rotation": None, "following_vspace": -3},
+    "title": {"scale": None, "rotation": None, "following_vspace": None},
 }
 
 if __name__ == "__main__":

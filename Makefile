@@ -29,7 +29,7 @@ env:
 
 addrecipe:
 	. $(VENV_BIN)/activate
-	$(VENV_BIN)/$(PY) main.py -a
+	$(VENV_BIN)/$(PY) main.py -a -c dinners
 
 book:
 	. $(VENV_BIN)/activate
