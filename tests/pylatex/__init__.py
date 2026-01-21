@@ -86,7 +86,8 @@ class TestVittles(unittest.TestCase):
         test = Vittles(recipe_path=test_recipe_dir, image_path=test_image_dir)
         self.assertEqual(test.recipe_path, test_recipe_dir)
         self.assertEqual(
-            test.recipe_path_contents, os.listdir(os.path.dirname(self.test_json_file))
+            test.recipe_path_contents,
+            sorted(os.listdir(os.path.dirname(self.test_json_file))),
         )
         self.assertEqual(len(test.available_categories), 0)
         self.assertEqual(len(test.available_recipes), 1)
