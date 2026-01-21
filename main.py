@@ -4,29 +4,25 @@ from vittles.utils import RecipeAdder, ImageParamsAdder
 from vittles import Vittles
 
 add_recipe = {
-    "Title": "Black Bean and Sweet Potato Quesadillas",
-    "Prep Time": "20 mins",
-    "Cook Time": "1 hour",
-    "Servings": "4",
+    "Title": "Slow Cooker Pernil",
+    "Prep Time": "12 hours 15 minutes",
+    "Cook Time": "9 hours",
+    "Servings": "8 to 10",
     "Ingredients": [
-        "1 large sweet potato",
-        "1 cup salsa",
-        "1 cup cooked brown rice",
-        "1 cup fresh spinach",
-        "1 can refried beans",
-        "1 can black beans",
-        "1/4 tsp onion powder",
-        "1/4 tsp chili powder",
-        "1/4 tsp cumin",
-        "8 whole tortillas",
+        "7-8 lb pork shoulder",
+        "16 cloves garlic",
+        "1 1/2 Tbs adobo seasoning",
+        "1 Tbs dried oregano",
+        "1/4 cup olive oil",
+        "1 Tbs sofrito bouillon",
+        "2 Tbs water",
+        "1/2 cup water",
     ],
     "Directions": [
-        "Preheat oven to 375 F. Prepare a sheet pan with parchment paper.",
-        "An hour before eating, peel and chop the sweet potatoes. Bake sweet potatoes in oven for 45 minutes, until soft. While those are cooking, cook the rice.",
-        "When sweet potatoes are finished, place in food processor or blender. Blend potatoes with rice, salsa and spinach.",
-        "Transfer sweet potato mash into sauce pan with black and refried beans. Heat mixture over medium and add onion and chili powders and cumin.",
-        "Place tortilla on griddle or frying pan at medium heat, slathering with sweet potato bean mixture. Place another tortilla on top. Cook for three minutes, then flip and cook for another three minutes.",
-        "Remove from griddle or frying pan and cut into desired sections. Serve with preferred toppings.",
+        "Combine garlic, adobo seasoning, oregano, 2 Tbs water and sofrito bouillon in food processor. Add olive oil to paste",
+        "Make several cuts all over the pork shoulder. Slather the pork shoulder with garlic paste. Marinate 8-12 hours in fridge",
+        "Place pork shoulder into slow cooker, fat side down with 1/2 cup of water. Cook for 9-10 hours on low.",
+        "Shred meat into chunks with two forks",
     ],
 }
 
@@ -77,7 +73,7 @@ if __name__ == "__main__":
         help="Add a recipe json file from add_recipe to json directory.",
     )
     parser.add_argument(
-        "-c", "--category", default="slow-cooker", help="Category for added recipe"
+        "-c", "--category", default="easy", help="Category for added recipe"
     )
     parser.add_argument(
         "-v", "--vittles", action="store_true", help="Generate vittles document."
