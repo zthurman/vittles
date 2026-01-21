@@ -49,7 +49,7 @@ class Vittles(Document):
     ):
         super().__init__()
         self.recipe_path = recipe_path
-        self.recipe_path_contents = os.listdir(self.recipe_path)
+        self.recipe_path_contents = sorted(os.listdir(self.recipe_path))
         self.image_path = image_path
         self.image_path_contents = os.listdir(self.image_path)
         self.title_image_name = title_image_name
